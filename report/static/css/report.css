@@ -288,7 +288,7 @@ p.has-dc::after { content: ""; display: block; clear: both; height: 0; }
         font: 600 4.4pt/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; white-space: nowrap; }
 .pill-best { background: linear-gradient(180deg, #e9cf94, #c9a565); color: #191104; }
 .pill-good { background: #2b3f88; color: #dbe4ff; }
-.pill-average { background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 .6pt rgba(174,179,204,.6); color: var(--ash); }
+.pill-average { background: #1b1f35; box-shadow: inset 0 0 0 .6pt rgba(174,179,204,.6); color: var(--ash); }   /* opaque: the card's top line must not show through */
 
 /* ------------------------------------------------------------------ forecast blocks */
 .area-head { display: flex; align-items: center; gap: 10pt; min-height: 26pt; margin: 16pt 0 6pt; padding: 12pt 0 0;
