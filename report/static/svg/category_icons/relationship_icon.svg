@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="2 5 20 14" width="20mm" height="14mm">
+<title>relationship icon</title>
+<desc>Relationship line icon (gold stroke), 24-unit grid</desc>
+<g transform="translate(0,0) scale(1)"><circle cx="9" cy="12" r="6" fill="none" stroke="#cfae6e" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="12" r="6" fill="none" stroke="#cfae6e" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M12,9.7 Q12.26,11.74 14.3,12 Q12.26,12.26 12,14.3 Q11.74,12.26 9.7,12 Q11.74,11.74 12,9.7Z" fill="#cfae6e"/></g>
+</svg>

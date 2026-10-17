@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-23.9 -23.9 47.8 47.8" width="47.8mm" height="47.8mm">
+<title>pearl</title>
+<desc>Pearl: lustrous white sphere with highlight and gold rim</desc>
+<defs><linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e8bd"/><stop offset=".45" stop-color="#d3b274"/><stop offset="1" stop-color="#8f6e3a"/></linearGradient><radialGradient id="rPearl" cx=".36" cy=".32" r=".85"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#ece9f2"/><stop offset=".8" stop-color="#b9bccf"/><stop offset="1" stop-color="#7f839c"/></radialGradient><radialGradient id="rStar"><stop offset="0" stop-color="#fff6de" stop-opacity=".95"/><stop offset=".18" stop-color="#ffe9b8" stop-opacity=".45"/><stop offset=".5" stop-color="#e9c98a" stop-opacity=".12"/><stop offset="1" stop-color="#e9c98a" stop-opacity="0"/></radialGradient></defs>
+<circle cx="0" cy="0" r="23.4" fill="url(#rStar)" opacity="0.25"/><circle cx="0" cy="0" r="13" fill="url(#rPearl)"/><ellipse cx="-4.16" cy="-4.94" rx="2.86" ry="1.69" fill="#ffffff" opacity="0.85" transform="rotate(-35 -4.16 -4.94)"/><circle cx="0" cy="0" r="13" fill="none" stroke="url(#gGold)" stroke-width="0.52" opacity="0.8"/>
+</svg>

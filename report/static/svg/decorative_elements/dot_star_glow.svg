@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-9.2 -9.2 18.4 18.4" width="18.4mm" height="18.4mm">
+<title>dot star glow</title>
+<desc>Round star point with soft halo</desc>
+<defs><radialGradient id="rStar"><stop offset="0" stop-color="#fff6de" stop-opacity=".95"/><stop offset=".18" stop-color="#ffe9b8" stop-opacity=".45"/><stop offset=".5" stop-color="#e9c98a" stop-opacity=".12"/><stop offset="1" stop-color="#e9c98a" stop-opacity="0"/></radialGradient></defs>
+<g opacity="1"><circle cx="0" cy="0" r="9" fill="url(#rStar)"/><circle cx="0" cy="0" r="2" fill="#ece6d6"/></g>
+</svg>

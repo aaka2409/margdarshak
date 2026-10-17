@@ -1,0 +1,3 @@
+name,dob,tob,pob,lat,lon,tz,email,sex,user_id
+Sample One,16/01/2002,10:30,"Delhi, India",28.6139,77.2090,5.5,one@example.com,male,1001
+Sample Two,05/08/1990,06:15,"Mumbai, India",19.0760,72.8777,5.5,two@example.com,female,1002

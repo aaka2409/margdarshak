@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-21.3 -21.3 42.6 42.6" width="42.6mm" height="42.6mm">
+<title>moon phase 01 of 12 crescent glow</title>
+<desc>Vector moon phase 1/12 (crescent) with gold halo</desc>
+<defs><linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e8bd"/><stop offset=".45" stop-color="#d3b274"/><stop offset="1" stop-color="#8f6e3a"/></linearGradient><radialGradient id="rGoldGlow"><stop offset="0" stop-color="#e9c98a" stop-opacity=".55"/><stop offset=".4" stop-color="#d3b274" stop-opacity=".18"/><stop offset="1" stop-color="#d3b274" stop-opacity="0"/></radialGradient></defs>
+<circle cx="0" cy="0" r="21" fill="url(#rGoldGlow)" opacity="0.29583333333333334"/><circle cx="0" cy="0" r="10" fill="#090c17"/><path d="M0,-10 A10,10 0 0 1 0,10 A8.33,10 0 0 0 0,-10Z" fill="url(#gGold)"/><circle cx="0" cy="0" r="10" fill="none" stroke="#cfae6e" stroke-width="0.35000000000000003" opacity="0.55"/>
+</svg>

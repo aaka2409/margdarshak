@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0.1 0.1 79.8 49.8" width="79.8mm" height="49.8mm">
+<title>card panel frame</title>
+<desc>Card panel: rounded hairline gold border with faint top-lit fill (sample at 80 x 50 mm; stretch to any size)</desc>
+<defs><linearGradient id="gCard" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.035"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.008"/></linearGradient></defs>
+<rect x="0.1" y="0.1" width="79.8" height="49.8" rx="1.2" fill="url(#gCard)" stroke="#cfae6e" stroke-opacity="0.30" stroke-width="0.2"/>
+</svg>

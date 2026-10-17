@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10.16 -10.16 44.32 44.32" width="44.32mm" height="44.32mm">
+<title>travel compass icon medallion</title>
+<desc>Travel &amp; Movement icon in a gold ring medallion with glow</desc>
+<defs><linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e8bd"/><stop offset=".45" stop-color="#d3b274"/><stop offset="1" stop-color="#8f6e3a"/></linearGradient><radialGradient id="rGoldGlow"><stop offset="0" stop-color="#e9c98a" stop-opacity=".55"/><stop offset=".4" stop-color="#d3b274" stop-opacity=".18"/><stop offset="1" stop-color="#d3b274" stop-opacity="0"/></radialGradient></defs>
+<circle cx="12" cy="12" r="21.66" fill="url(#rGoldGlow)" opacity="0.35"/><circle cx="12" cy="12" r="11.4" fill="#080b16" stroke="url(#gGold)" stroke-width="0.34199999999999997"/><circle cx="12" cy="12" r="9.8" fill="none" stroke="#cfae6e" stroke-width="0.1368" opacity="0.4" stroke-dasharray="0.23 1.03"/><g transform="translate(0.03,0.03) scale(1)"><circle cx="12" cy="12" r="9" fill="none" stroke="#cfae6e" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.6 8.4 L13.4 13.4 L8.4 15.6 L10.6 10.6 Z" fill="none" stroke="#cfae6e" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 1.6 V3.6 M12 20.4 V22.4 M1.6 12 H3.6 M20.4 12 H22.4" fill="none" stroke="#cfae6e" stroke-width="0.7" stroke-linecap="round"/></g>
+</svg>

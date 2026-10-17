@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-19.5 -19.5 39 39" width="39mm" height="39mm">
+<title>venus planet</title>
+<desc>Venus: pearl-white sphere (vector illustration with gradients)</desc>
+<defs><radialGradient id="rGoldGlow"><stop offset="0" stop-color="#e9c98a" stop-opacity=".55"/><stop offset=".4" stop-color="#d3b274" stop-opacity=".18"/><stop offset="1" stop-color="#d3b274" stop-opacity="0"/></radialGradient><radialGradient id="rVen" cx=".35" cy=".32" r=".9"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e7dcc2"/><stop offset="1" stop-color="#8c7c5c"/></radialGradient></defs>
+<circle cx="0" cy="0" r="19" fill="url(#rGoldGlow)" opacity="0.35"/><circle cx="0" cy="0" r="10" fill="url(#rVen)"/>
+</svg>

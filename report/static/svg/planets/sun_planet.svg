@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-26.5 -26.5 53 53" width="53mm" height="53mm">
+<title>sun planet</title>
+<desc>Sun: radiant gold disc with rays (vector illustration with gradients)</desc>
+<defs><radialGradient id="rGoldGlow"><stop offset="0" stop-color="#e9c98a" stop-opacity=".55"/><stop offset=".4" stop-color="#d3b274" stop-opacity=".18"/><stop offset="1" stop-color="#d3b274" stop-opacity="0"/></radialGradient><radialGradient id="rSun" cx=".4" cy=".36" r=".8"><stop offset="0" stop-color="#fff7dc"/><stop offset=".5" stop-color="#f0cf85"/><stop offset="1" stop-color="#b98a3e"/></radialGradient></defs>
+<circle cx="0" cy="0" r="26" fill="url(#rGoldGlow)" opacity="0.9"/><path d="M0,-12.5L0,-17.5 M3.24,-12.07L3.88,-14.49 M6.25,-10.83L8.75,-15.16 M8.84,-8.84L10.61,-10.61 M10.83,-6.25L15.16,-8.75 M12.07,-3.24L14.49,-3.88 M12.5,0L17.5,0 M12.07,3.24L14.49,3.88 M10.83,6.25L15.16,8.75 M8.84,8.84L10.61,10.61 M6.25,10.83L8.75,15.16 M3.24,12.07L3.88,14.49 M0,12.5L0,17.5 M-3.24,12.07L-3.88,14.49 M-6.25,10.83L-8.75,15.16 M-8.84,8.84L-10.61,10.61 M-10.83,6.25L-15.16,8.75 M-12.07,3.24L-14.49,3.88 M-12.5,0L-17.5,0 M-12.07,-3.24L-14.49,-3.88 M-10.83,-6.25L-15.16,-8.75 M-8.84,-8.84L-10.61,-10.61 M-6.25,-10.83L-8.75,-15.16 M-3.24,-12.07L-3.88,-14.49" fill="none" stroke="#f3dfae" stroke-width="0.44999999999999996" opacity="0.8" stroke-linecap="round"/><circle cx="0" cy="0" r="10" fill="url(#rSun)"/>
+</svg>

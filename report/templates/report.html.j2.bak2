@@ -1,0 +1,497 @@
+{#- Margdarshak yearly report.  One document; fixed pages are written out here,
+    running text is wrapped in <section class="flow"> and paginated by paginate.js. -#}
+{%- set S = static -%}
+{%- set who = person.name ~ " · " -%}
+
+{%- macro footer() -%}
+<div class="footer">
+  <img class="rule" src="{{ S }}/svg/dividers/gold_rule_fade_both_ends.svg" alt="">
+  <div class="who">{{ person.name }} · <span class="deva">{{ title_hi }}</span> {{ year }}</div>
+  <img class="logo" src="{{ S }}/img/logo_white.png" alt="Astro Diva Pratihast">
+  <div class="folio"></div>
+</div>
+{%- endmacro -%}
+
+{%- macro running(text) -%}
+<div class="running"><span class="txt">{{ text }}</span>{{ art.sign_icon|safe }}</div>
+{%- endmacro -%}
+
+{%- macro sec_head(num, eyebrow, title_lines, emblem) -%}
+<div class="sec-head">
+  <div class="row">
+    {% if num %}<div class="num">{{ num }}</div>{% endif %}
+    <div class="titles">
+      <div class="eyebrow">{{ eyebrow }}</div>
+      <h1>{% for l in title_lines %}{{ l }}{% if not loop.last %}<br>{% endif %}{% endfor %}</h1>
+    </div>
+  </div>
+  <img class="hr" src="{{ S }}/svg/dividers/gold_rule_fade_right.svg" alt="">
+  <div class="emblem">{{ emblem|safe }}</div>
+</div>
+{%- endmacro -%}
+
+{%- macro emblem_img(path) -%}<img src="{{ S }}/svg/{{ path }}" alt="">{%- endmacro -%}
+
+{%- macro chapter(ch, bg, art_html, label=None, intro=None) -%}
+<div class="page chapter {{ bg }}" data-toc="{{ ch.id }}">
+  {{ art_html|safe }}
+  <div class="title">{{ ch.opener[0] }}<em>{{ ch.opener[1] }}</em></div>
+  {% if intro %}<div class="intro">{{ intro }}</div>{% endif %}
+  {{ footer() }}
+</div>
+{%- endmacro -%}
+
+{%- macro page_art(path, x, y, w) -%}
+<img class="art" style="left:{{ x }}mm;top:{{ y }}mm;width:{{ w }}mm" src="{{ S }}/svg/{{ path }}" alt="">
+{%- endmacro -%}
+
+{%- macro pill(level) -%}<span class="pill pill-{{ level }}">{{ level }}</span>{%- endmacro -%}
+{%- macro medallion(icon) -%}<span class="ic med"><img src="{{ S }}/svg/category_icons/{{ icon }}_icon_medallion.svg" alt=""></span>{%- endmacro -%}
+
+{%- macro legend() -%}
+<div class="legend">
+  <span>{{ art.indicator.best|safe }} Best</span><span>{{ art.indicator.good|safe }} Good</span><span>{{ art.indicator.average|safe }} Average</span>
+</div>
+{%- endmacro -%}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ title_en }} {{ year }} — {{ person.name }}</title>
+<meta name="author" content="Astro Diva Pratihast">
+<link rel="stylesheet" href="{{ S }}/css/report.css">
+</head>
+<body>
+{{ art.defs|safe }}
+
+<template id="page-shell"><div class="page bg-page">{{ running("") }}{{ footer() }}</div></template>
+<template id="tail-moon"><div class="tail">{{ art.tailpiece|safe }}</div></template>
+<template id="tail-star"><div class="tail"><img class="flourish" src="{{ S }}/svg/dividers/star_flourish_divider_small.svg" alt=""></div></template>
+
+{# ============================================================ COVER #}
+<div class="page cover bg-cover">
+  <img class="frame" src="{{ S }}/svg/borders/cover_double_line_frame_a4.svg" alt="">
+  <img class="logo" src="{{ S }}/img/logo_white.png" alt="Astro Diva Pratihast">
+  <div class="label eyebrow">{{ report_label }}</div>
+  <div class="art" style="left:31.8mm;top:42.86mm">{{ art.cover_wheel|safe }}</div>
+  <div class="hi">{{ title_hi }}</div>
+  <div class="en eyebrow">{{ title_en }}</div>
+  <div class="year">{{ year }}</div>
+  <div class="name">{{ person.name }}</div>
+  <div class="moonline"><i></i><span class="eyebrow">Moon sign · {{ moon }}</span><i></i></div>
+  <div class="born eyebrow">Born {{ person.dob }}</div>
+</div>
+
+{# ============================================================ DISCLAIMER #}
+<section class="flow" data-running="Disclaimer">
+  <template class="flow-first">
+    {{ sec_head(None, "Terms of use", ["Disclaimer"], emblem_img("decorative_elements/disclaimer_seal_emblem.svg")) }}
+    <div class="pre"></div>
+  </template>
+  <div class="flow-source">
+    {% for p in fixed.disclaimer %}
+    {% if loop.last %}<p class="lede" data-nosplit style="margin-top:6pt">{{ p }}</p>{% else %}<p>{{ p }}</p>{% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{# ============================================================ BEFORE YOU BEGIN #}
+<div class="page bg-page" data-fit="Before You Begin">
+  {{ running("Before You Begin") }}
+  <div class="plain-head">
+    <div class="eyebrow">{{ fixed.before_you_begin_eyebrow or "A note before your journey" }}</div>
+    <h1>Before You <em>Begin</em></h1>
+    <img class="hr-short" src="{{ S }}/svg/dividers/gold_rule_short_fade.svg" alt="">
+  </div>
+  <img class="art" style="left:146.7mm;top:16.5mm;width:53.8mm" src="{{ S }}/svg/decorative_elements/before_you_begin_arch_portal.svg" alt="">
+  <div class="content serif-body" style="top:164.4pt;right:37.6mm;font-size:calc(13.6pt * var(--fit,1));line-height:calc(19.5pt * var(--fit,1))" data-max-bottom="770">
+    {% for p in fixed.before_you_begin %}<p>{{ p }}</p>{% endfor %}
+  </div>
+  {{ footer() }}
+</div>
+
+{# ============================================================ CONTENTS #}
+<div class="page bg-page">
+  {{ running("Contents") }}
+  <div class="toc-head">
+    <div class="label">{{ title_hi }}<span>{{ year }}</span></div>
+    <h1>Contents</h1>
+    <div class="for"><span class="caps">Prepared for</span><b>{{ person.name }}</b></div>
+  </div>
+  <div class="toc">
+    {% for ch in chapter_list %}
+    <div class="row">
+      <div class="n">{{ ch.num }}</div>
+      <div class="m">{{ art.toc_moons[loop.index0]|safe }}</div>
+      <div class="t">{{ ch.title }}</div>
+      <div class="s">{{ ch.subtitle }}</div>
+      <div class="p" data-toc-ref="{{ ch.id }}"></div>
+    </div>
+    {% endfor %}
+  </div>
+  {{ footer() }}
+</div>
+
+{# ============================================================ CHAPTER 01 #}
+{{ chapter(chapters.mirror, "bg-a", '<div class="art" style="left:34.5mm;top:39.5mm">' ~ art.mirror ~ '</div>', intro=fixed.chapter1_intro) }}
+
+<div class="page bg-page profile">
+  {{ running(chapters.mirror.title) }}
+  <div class="who">
+    <div class="eyebrow">Cosmic identity{% if chart.tatva %} · {{ chart.tatva }}{% endif %}</div>
+    <h1>{{ person.name }}</h1>
+    <div class="born">{{ born_line }}</div>
+  </div>
+  <div class="chart-top">Asc · {{ asc }}</div>
+  <div class="chart">{{ art.kundali|safe }}</div>
+  {% if sun %}<div class="chart-bot">Sun · {{ sun }}</div>{% endif %}
+  <div class="cards3">
+    <div class="card sign-card"><div class="badge">{{ art.badge_moon|safe }}</div><div class="eyebrow">Moon sign</div><b>{{ moon|title }}</b></div>
+    <div class="card sign-card">{% if sun %}<div class="badge">{{ art.badge_sun|safe }}</div><div class="eyebrow">Sun sign</div><b>{{ sun|title }}</b>{% endif %}</div>
+    <div class="card sign-card"><div class="badge">{{ art.badge_asc|safe }}</div><div class="eyebrow">Ascendant</div><b>{{ asc|title }}</b></div>
+  </div>
+  <div class="facts">
+    {% for f in profile_rows %}<div class="fact"><div class="k">{{ f.label }}</div><div class="v">{{ f.value }}</div></div>{% endfor %}
+  </div>
+  <div class="card const-card">
+    <div class="eyebrow">Moon sign constellation</div>
+    <b>{{ moon|title }}</b>
+    {{ art.constellation|safe }}
+  </div>
+  {{ footer() }}
+</div>
+
+<section class="flow" data-running="{{ chapters.mirror.title }}">
+  <template class="flow-first">
+    {{ sec_head(chapters.mirror.num, "Personality & true-self analysis", [chapters.mirror.title], emblem_img("decorative_elements/mirror_section_emblem.svg")) }}
+    <div class="pre"><p class="lede" style="margin:16.1pt 20mm 20pt 0">{{ mirror.lede }}</p></div>
+  </template>
+  <div class="flow-source">
+    {% for p in mirror.paras %}<p{% if loop.first %} class="has-dc"{% endif %}>{{ p|rich(dropcap=loop.first) }}</p>{% endfor %}
+  </div>
+</section>
+
+{# ============================================================ CHAPTER 02 #}
+{{ chapter(chapters.shape, "bg-b", page_art("decorative_elements/chapter_02_inner_outer_world_vesica.svg", 44.2, 49.5, 121.6)) }}
+
+<section class="flow" data-running="{{ chapters.shape.title }}">
+  <template class="flow-first">
+    {{ sec_head(chapters.shape.num, "Yearly overview", chapters.shape.opener, emblem_img("decorative_elements/vesica_section_emblem.svg")) }}
+    <div class="pre"></div>
+  </template>
+  <div class="flow-source">
+    {% for p in shape.paras %}<p{% if loop.first %} class="has-dc"{% endif %}>{{ p|rich(dropcap=loop.first) }}</p>{% endfor %}
+  </div>
+</section>
+
+{# ============================================================ CHAPTER 03 — MONTHS #}
+{{ chapter(chapters.monthly, "bg-ch3", page_art("decorative_elements/chapter_03_moon_phase_wheel.svg", 36.3, 43.3, 137.4)) }}
+
+<div class="page bg-page glance">
+  {{ running("Your " ~ year ~ " at a Glance") }}
+  {{ sec_head(chapters.monthly.num, "Year overview", ["Your " ~ year ~ " at a Glance"], art.moon_emblems[11]) }}
+  <div class="label1 eyebrow">Monthly status across the eight areas of life</div>
+  <div class="grid">
+    <div class="hd"><span></span>{% for m in months %}<span>{{ m.abbr }}</span>{% endfor %}</div>
+    {% for r in glance_rows %}
+    <div class="r"><b>{{ r.label }}</b>{% for lvl in r.levels %}<i>{{ art.indicator[lvl]|safe }}</i>{% endfor %}</div>
+    {% endfor %}
+  </div>
+  {{ legend() }}
+  <div class="label2 eyebrow">Jupiter’s movement through your year</div>
+  {{ jupiter.timeline|safe }}
+  <div class="card note-card" style="top:648.9pt">
+    <div class="eyebrow">How to read this chapter</div>
+    <p>Each month opens with the phase of the year, followed by your status map across the eight areas of life and a detailed forecast for every area. Status labels are exactly as assessed for your chart: Best, Good and Average.</p>
+  </div>
+  {{ footer() }}
+</div>
+
+{% for m in months %}
+<div class="page month-open" style="background-image:url('{{ S }}/img/bg_month_{{ m.num }}.jpg')">
+  <div class="running-center">Future lens · {{ year }}</div>
+  {{ page_art("celestial_frames/month_ring_frame_" ~ m.num ~ "_" ~ m.name|lower ~ ".svg", 39.117, 42.1, 131.707) }}
+  <div class="count eyebrow">Month {{ m.num }} of 12</div>
+  <div class="name">{{ m.name }}</div>
+  {{ page_art("dividers/moon_phase_strip_" ~ m.num ~ "_" ~ m.name|lower ~ ".svg", 40.9, 245.3, 128.2) }}
+  {{ footer() }}
+</div>
+
+<div class="page bg-page status">
+  {{ running(m.name ~ " · Future lens") }}
+  <div class="status-head">
+    <div class="eyebrow">{{ m.name }} {{ year }}</div>
+    <h1>Your Status <em>Map</em></h1>
+    <img class="hr" src="{{ S }}/svg/dividers/gold_rule_fade_right.svg" alt="">
+    <div class="sign"><div class="eyebrow">Moon sign</div><b>{{ moon|title }}</b></div>
+  </div>
+  {{ m.radar|safe }}
+  {{ legend() }}
+  <div class="status-list">
+    {% for a in m.areas %}<div class="it">{{ medallion(a.icon) }}<b>{{ a.label }}</b>{{ pill(a.level) }}</div>{% endfor %}
+  </div>
+  {{ footer() }}
+</div>
+
+<section class="flow" data-running="{{ m.name }} · Future lens">
+  <template class="flow-first">
+    {{ sec_head(m.num, "Detailed forecast", [m.name ~ " " ~ year], art.moon_emblems[loop.index0]) }}
+    <div class="pre"></div>
+  </template>
+  <div class="flow-source">
+    {% for a in m.areas %}
+    <div class="area-head{% if not loop.first %} sep{% endif %}" data-keep>{{ medallion(a.icon) }}<b>{{ a.label }}</b>{{ pill(a.level) }}</div>
+    {% for p in a.paras %}<p>{{ p|rich }}</p>{% endfor %}
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+
+{# ============================================================ CHAPTER 03 continued — YEARLY #}
+{{ chapter(chapters.summary, "bg-b", page_art("decorative_elements/chapter_03b_life_areas_wheel.svg", 38.64, 43.64, 132.72), label="Chapter " ~ chapters.summary.num ~ " · Continued") }}
+
+{% for y in yearly %}
+<section class="flow" data-running="{{ y.title }}">
+  <template class="flow-first">
+    {{ sec_head(y.num, "Yearly forecast", [y.title], emblem_img("category_icons/" ~ y.icon ~ "_section_emblem.svg")) }}
+    <div class="pre"></div>
+  </template>
+  <div class="flow-source">
+    {% for p in y.intro %}<p{% if loop.first %} class="has-dc"{% endif %}>{{ p|rich(dropcap=loop.first) }}</p>{% endfor %}
+    {% for s in y.sections %}
+    {% if s.title %}<h3 class="yr-h" data-keep>{{ s.title }}</h3>{% endif %}
+    {% for p in s.body %}<p{% if loop.last %} class="yr-last"{% endif %}>{{ p|rich }}</p>{% endfor %}
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+
+{# ============================================================ CHAPTER 04 — TRANSITS #}
+{{ chapter(chapters.transits, "bg-a", page_art("transit_diagrams/planetary_orbit_diagram.svg", 29.512, 47.4, 150.975)) }}
+
+<section class="flow" data-running="Jupiter’s Transit Impact on You">
+  <template class="flow-first">
+    {{ sec_head("01", "Planetary transit", ["Jupiter’s Transit", "Impact on You"], emblem_img("planets/jupiter_section_emblem.svg")) }}
+    <div class="pre"><div style="margin:54pt 0 27pt 1.1mm">{{ jupiter.timeline|safe }}</div></div>
+  </template>
+  <div class="flow-source">
+    {% for p in jupiter.periods %}
+    <div class="period-head{% if not loop.first %} sep{% endif %}" data-keep>
+      <span class="pl"><img src="{{ S }}/svg/planets/jupiter_planet_small_row_marker.svg" alt=""></span>
+      <span><b>{{ p.house_label }}</b>{% if p.dates %}<span class="d">{{ p.dates }}</span>{% endif %}{% if p.in_label %}<span class="s">{{ p.in_label }}</span>{% endif %}</span>
+    </div>
+    {% for t in p.body %}<p>{{ t|rich }}</p>{% endfor %}
+    {% endfor %}
+    {% for t in jupiter.closing %}<p class="closing{% if loop.first %} sep{% endif %}">{{ t|rich }}</p>{% endfor %}
+  </div>
+</section>
+
+{% for t in [("02", "Saturn", saturn, "planets/saturn_section_emblem.svg"), ("03", "Rahu-Ketu", rahu, "planets/rahu_ketu_section_emblem.svg")] %}
+<section class="flow" data-running="{{ t[1] }}’s Transit Impact on You">
+  <template class="flow-first">
+    {{ sec_head(t[0], "Planetary transit", [t[1] ~ "’s Transit", "Impact on You"], emblem_img(t[3])) }}
+    <div class="pre"><div style="margin:15.1pt 0 15.4pt 0">
+      {% for c in t[2].charts %}
+      <div class="houses{% if t[2].charts|length > 1 %} small{% endif %}">
+        {{ c.svg|safe }}
+        <div>
+          <div class="eyebrow">{{ c.title }}</div>
+          <div class="strip">{% for h in range(1, 13) %}<i{% if h in c.active %} class="on"{% endif %}>{{ h }}</i>{% endfor %}</div>
+          <div class="cap">{{ c.caption }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div></div>
+  </template>
+  <div class="flow-source">
+    {% for p in t[2].paras %}<p{% if loop.first %} class="has-dc"{% endif %}>{{ p|rich(dropcap=loop.first) }}</p>{% endfor %}
+  </div>
+</section>
+{% endfor %}
+
+{% for pm in planet_months %}
+<section class="flow" data-running="{{ pm.label }}’s Transit Impact on You">
+  <template class="flow-first">
+    {{ sec_head(pm.num, "Planetary transit", [pm.label ~ "’s Transit", "Impact on You"], emblem_img("planets/" ~ pm.key ~ "_section_emblem.svg")) }}
+    <div class="pre"><div class="sub-eyebrow" style="margin:16.3pt 0 23.45pt">{{ pm.label }} · Month by month</div></div>
+  </template>
+  <div class="flow-source">
+    {% for e in pm.months %}
+    <div class="pm-head{% if not loop.first %} sep{% endif %}" data-keep>{{ art.moon_small[e.index - 1]|safe }}<b>{{ e.name }}</b><span>Month {{ e.num }}</span></div>
+    {% for t in e.body %}<p data-nosplit class="pm-p">{{ t|rich }}</p>{% endfor %}
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+
+{# ============================================================ CHAPTER 05 — ENERGIES #}
+{{ chapter(chapters.energies, "bg-b", page_art("decorative_elements/chapter_05_sun_and_eclipse_discs.svg", 5.5, 43.5, 184)) }}
+
+{% for e in [("01", "Working for you", ["Your Lucky Dates,", "Colours & Day"], lucky, "Lucky", "decorative_elements/lucky_star_section_emblem.svg", "Your Lucky Dates, Colours & Day"),
+             ("02", "Working against you", ["Dates, Colours & Day", "to Handle with Care"], unlucky, "Unlucky", "decorative_elements/eclipse_section_emblem.svg", "Dates, Colours & Day to Handle with Care")] %}
+<div class="page bg-page" data-fit="{{ e[6] }}">
+  {{ running(e[6]) }}
+  {{ sec_head(e[0], e[1], e[2], emblem_img(e[5])) }}
+  <div class="energy">
+    <div class="card"><div class="viz">{{ e[3].calendar|safe }}</div>
+      <div class="txt" data-within=".card"><div class="eyebrow">{{ e[4] }} dates</div><b>{{ e[3].dates_label }}</b><p>{{ e[3].dates_text }}</p></div></div>
+    <div class="card"><div class="viz">{{ e[3].swatches|safe }}</div>
+      <div class="txt" data-within=".card"><div class="eyebrow">{{ e[4] }} colours</div><b>{{ e[3].colours_label }}</b><p>{{ e[3].colours_text }}</p></div></div>
+    <div class="card"><div class="viz">{{ e[3].week|safe }}</div>
+      <div class="txt" data-within=".card"><div class="eyebrow">{{ e[4] }} day</div><b>{{ e[3].day }}</b><p>{{ e[3].day_text }}</p></div></div>
+  </div>
+  {{ footer() }}
+</div>
+{% endfor %}
+
+<div class="page bg-page" data-fit="Rudraksha">
+  {{ running("Rudraksha") }}
+  {{ sec_head("03", "Sacred protection", ["Rudraksha"], rudraksha.emblem) }}
+  <div class="card rud-card">{{ rudraksha.art|safe }}<div class="eyebrow">Recommended for you</div><b>{{ rudraksha.label }}</b></div>
+  <p class="rud-quote" data-max-bottom="394">{{ rudraksha.description }}</p>
+  <div class="rud-cols" data-max-bottom="768">
+    <div>
+      <h3>When You Must Remove Rudraksha</h3>
+      <ul class="stars-list">{% for t in fixed.rudraksha_remove %}<li>{{ t }}</li>{% endfor %}</ul>
+      {% if fixed.rudraksha_remove_sub %}<ul class="dash-list">{% for t in fixed.rudraksha_remove_sub %}<li>{{ t }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+    <div>
+      <h3>Procedure Of Wearing Rudraksha (First Time)</h3>
+      {% for t in fixed.rudraksha_procedure %}<p>{{ t }}</p>{% endfor %}
+    </div>
+  </div>
+  {{ footer() }}
+</div>
+
+<div class="page bg-page" data-fit="Gemstones Report">
+  {{ running("Gemstones Report") }}
+  {{ sec_head("04", "Stones aligned to your chart", ["Gemstones Report"], gems.emblem) }}
+  <div class="gem-label1 eyebrow">Lucky gemstones</div>
+  <div class="gem-cards">
+    {% for g in gems.lucky %}
+    <div class="card gem-card">{{ g.art|safe }}<div data-within=".gem-card" data-pad="6"><b>{{ g.name }}</b><p>{{ g.text|mantra }}</p></div></div>
+    {% endfor %}
+  </div>
+  <div class="gem-bottom" data-max-bottom="768">
+    {% if gems.unlucky %}
+    <div class="gem-avoid-list">
+      <div class="eyebrow">Unlucky gemstones</div>
+      {% for g in gems.unlucky %}<div class="it">{{ g.art|safe }}<b>{{ g.name }}</b></div>{% endfor %}
+    </div>
+    {% endif %}
+    <div class="gem-process"><div class="eyebrow">Process</div><p>{{ gems.process }}</p></div>
+  </div>
+  {{ footer() }}
+</div>
+
+{# ============================================================ CHAPTER 06 — DO'S AND DON'TS #}
+{{ chapter(chapters.dodont, "bg-a", page_art("decorative_elements/chapter_06_check_and_cross_medallions.svg", 19.2, 58.2, 163.5)) }}
+
+<div class="page bg-page" data-fit="{{ chapters.dodont.title }}">
+  {{ running(chapters.dodont.title) }}
+  {{ sec_head(chapters.dodont.num, "Your framework for " ~ year, chapters.dodont.opener, emblem_img("decorative_elements/check_section_emblem.svg")) }}
+  <div class="dd" data-max-bottom="768">
+    <div><div class="eyebrow">Embrace · Do’s</div>
+      {% for t in dos %}<div class="it"><img src="{{ S }}/svg/decorative_elements/check_icon.svg" alt="">{{ t }}</div>{% endfor %}</div>
+    <div><div class="eyebrow off">Avoid · Don’ts</div>
+      {% for t in donts %}<div class="it"><img src="{{ S }}/svg/decorative_elements/cross_icon.svg" alt="">{{ t }}</div>{% endfor %}</div>
+  </div>
+  <div class="tail dd-tail">{{ art.tailpiece|safe }}</div>
+  {{ footer() }}
+</div>
+
+{# ============================================================ CHAPTER 07 — REMEDIES #}
+{{ chapter(chapters.remedies, "bg-b", page_art("spiritual_icons/diya_mandala_illustration.svg", 42.5, 47.5, 125)) }}
+
+<div class="page bg-page" data-fit="{{ chapters.remedies.title }}">
+  {{ running(chapters.remedies.title) }}
+  {{ sec_head(chapters.remedies.num, "Sacred practice", chapters.remedies.opener, emblem_img("spiritual_icons/lotus_star_section_emblem.svg")) }}
+  <p class="lede rem-lede" data-max-bottom="318" data-own-fit>{{ remedies.intro }}</p>
+  <div class="rem-cards">
+    {% for r in remedies["items"] %}
+    <div class="card rem-card">{{ r.art|safe }}<div class="txt" data-within=".rem-card"><div class="eyebrow">Remedy {{ r.num }}</div><p>{{ r.text }}</p></div></div>
+    {% endfor %}
+  </div>
+  {{ footer() }}
+</div>
+
+{# ============================================================ CHAPTER 08 — LIGHT #}
+{{ chapter(chapters.light, "bg-a", page_art("decorative_elements/chapter_08_rising_sun.svg", 20, 46, 170)) }}
+
+<div class="page bg-b affirm" data-fit="Affirmation">
+  <img class="ring" src="{{ S }}/svg/celestial_frames/affirmation_ring_frame.svg" alt="">
+  <div class="box" data-max-bottom="600">
+    <div class="eyebrow">Your affirmation for {{ year }}</div>
+    <blockquote>{{ affirmation.line }}</blockquote>
+    <img class="div" src="{{ S }}/svg/dividers/star_rule_divider_short.svg" alt="">
+    <p class="why">{{ affirmation.why }}</p>
+  </div>
+  {{ footer() }}
+</div>
+
+<div class="page bg-page" data-fit="{{ chapters.light.title }}">
+  {{ running(chapters.light.title) }}
+  {{ sec_head(chapters.light.num, "Practice", [affirmation.ritual.name or "Your Ritual"], affirmation.ritual_emblem) }}
+  <div class="ritual" data-max-bottom="768">
+    {% for r in affirmation.ritual.rows %}<div class="r"><div class="k">{{ r.label }}</div><div class="v">{{ r.text }}</div></div>{% endfor %}
+    <div class="closing">
+      <p class="has-dc">{{ affirmation.closing|rich(dropcap=True) }}</p>
+      <p class="light">{{ affirmation.light }}</p>
+    </div>
+  </div>
+  {{ footer() }}
+</div>
+
+{# ============================================================ CHAPTER 09 — CLOSING #}
+{{ chapter(chapters.closing, "bg-b", page_art("decorative_elements/chapter_09_guiding_star.svg", 42.5, 47.5, 125)) }}
+
+<div class="page bg-page" data-fit="{{ chapters.closing.title }}">
+  {{ running(chapters.closing.title) }}
+  <div class="plain-head">
+    <div class="eyebrow">A personal note</div>
+    <h1>{{ chapters.closing.opener[0] }}<br><em>{{ chapters.closing.opener[1] }}</em></h1>
+    <img class="hr-short" src="{{ S }}/svg/dividers/gold_rule_short_fade.svg" alt="">
+  </div>
+  <img class="art" style="left:133.8mm;top:19.8mm;width:72.4mm" src="{{ S }}/svg/celestial_frames/letter_crescent_with_tick_ring.svg" alt="">
+  <div class="letter-body" data-max-bottom="770">
+    {% for p in fixed.letter %}<p>{{ p }}</p>{% endfor %}
+    <p class="thanks">{{ fixed.letter_thanks }}</p>
+    <p class="signoff">{{ fixed.letter_signoff }}</p>
+    <p class="sig">{{ fixed.letter_signature }}</p>
+  </div>
+  {{ footer() }}
+</div>
+
+{# ============================================================ CONSULTATION #}
+<div class="page bg-page" data-toc="consult" data-fit="Personal Consultation">
+  {{ running("Personal Consultation") }}
+  {{ sec_head(chapters.consult.num, "A private invitation", ["Still Unsure? Book Your", "Personal Consultation"], emblem_img("decorative_elements/consultation_star_section_emblem.svg")) }}
+  <div class="consult-body" data-max-bottom="498">
+    {% for p in fixed.consultation %}<p>{{ p }}</p>{% endfor %}
+  </div>
+  <div class="card consult-card">
+    <img class="crescent" src="{{ S }}/svg/celestial_frames/consultation_crescent_with_tick_ring.svg" alt="">
+    <img class="logo" src="{{ S }}/img/logo_white.png" alt="Astro Diva Pratihast">
+    <div class="eyebrow">One-to-one astrology · Personal guidance</div>
+    <h2>A private reading with<em>Diva Pratihast</em></h2>
+    <a class="btn" href="{{ fixed.consultation_url }}">Book consultation now on WhatsApp</a>
+    <div class="contact"><a href="{{ fixed.consultation_url }}">{{ contact.whatsapp_label }}</a><a href="https://{{ contact.website }}">{{ contact.website }}</a></div>
+  </div>
+  {{ footer() }}
+</div>
+
+{# ============================================================ BACK COVER #}
+<div class="page back bg-a" data-fit="Back cover">
+  <img class="frame" src="{{ S }}/svg/borders/cover_double_line_frame_a4.svg" alt="">
+  <img class="logo" src="{{ S }}/img/logo_white.png" alt="Astro Diva Pratihast">
+  <div class="art" style="left:42.5mm;top:37.24mm">{{ art.back_ring|safe }}</div>
+  <div class="about" data-max-bottom="668">{% for p in back_cover %}<p>{{ p }}</p>{% endfor %}</div>
+  <div class="tail2">
+    <img class="div" src="{{ S }}/svg/dividers/star_rule_divider_short.svg" alt="">
+    <div class="tag">{{ back_cover_tagline }}</div>
+    <div class="caps">{{ contact.website }} · {{ contact.phone }}</div>
+  </div>
+</div>
+<script src="{{ S }}/js/paginate.js"></script>
+</body>
+</html>

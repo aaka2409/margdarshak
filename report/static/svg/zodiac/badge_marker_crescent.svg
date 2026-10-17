@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="17.7 1.7 5 5" width="5mm" height="5mm">
+<title>badge marker crescent</title>
+<desc>Small crescent marker used on the Moon-sign badge</desc>
+<defs><linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e8bd"/><stop offset=".45" stop-color="#d3b274"/><stop offset="1" stop-color="#8f6e3a"/></linearGradient></defs>
+<circle cx="20.2" cy="4.2" r="2.3" fill="#090c17"/><path d="M20.2,1.9 A2.3,2.3 0 0 1 20.2,6.5 A0.92,2.3 0 0 0 20.2,1.9Z" fill="url(#gGold)"/><circle cx="20.2" cy="4.2" r="2.3" fill="none" stroke="#cfae6e" stroke-width="0.0805" opacity="0.55"/>
+</svg>

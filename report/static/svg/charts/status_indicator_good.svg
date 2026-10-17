@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="1.68 1.68 6.64 6.64" width="6.64mm" height="6.64mm">
+<title>status indicator good</title>
+<desc>Good: half-lit ice-blue disc (status indicator)</desc>
+<defs><linearGradient id="gIce" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3ecfb"/><stop offset="1" stop-color="#8ea6d2"/></linearGradient></defs>
+<circle cx="5" cy="5" r="3.02" fill="#0b1020" stroke="#a9bde0" stroke-width="0.468"/><path d="M5,1.98 A3.02,3.02 0 0 1 5,8.02Z" fill="url(#gIce)"/>
+</svg>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-19.5 -19.5 39 39" width="39mm" height="39mm">
+<title>mars planet</title>
+<desc>Mars: red-orange sphere (vector illustration with gradients)</desc>
+<defs><radialGradient id="rGoldGlow"><stop offset="0" stop-color="#e9c98a" stop-opacity=".55"/><stop offset=".4" stop-color="#d3b274" stop-opacity=".18"/><stop offset="1" stop-color="#d3b274" stop-opacity="0"/></radialGradient><radialGradient id="rMars" cx=".35" cy=".32" r=".9"><stop offset="0" stop-color="#ffc9a0"/><stop offset=".55" stop-color="#c8603a"/><stop offset="1" stop-color="#5a1f12"/></radialGradient></defs>
+<circle cx="0" cy="0" r="19" fill="url(#rGoldGlow)" opacity="0.35"/><circle cx="0" cy="0" r="10" fill="url(#rMars)"/>
+</svg>

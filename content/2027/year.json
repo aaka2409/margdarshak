@@ -1,0 +1,258 @@
+{
+ "year": 2027,
+ "title_hi": "मार्गदर्शक",
+ "title_en": "Margdarshak",
+ "report_label": "Personal Astrology Report",
+ "chapters": [
+  {
+   "id": "mirror",
+   "num": "01",
+   "title": "The Mirror to Your True Self",
+   "subtitle": "Your cosmic profile & personality",
+   "opener": [
+    "The Mirror to",
+    "Your True Self"
+   ]
+  },
+  {
+   "id": "shape",
+   "num": "02",
+   "title": "How {year} Will Shape Your Inner and Outer World",
+   "subtitle": "Inner & outer world",
+   "opener": [
+    "How {year} Will Shape Your",
+    "Inner and Outer World"
+   ]
+  },
+  {
+   "id": "monthly",
+   "num": "03",
+   "title": "Your Month-by-Month {year} Roadmap",
+   "subtitle": "Month-by-month future lens",
+   "opener": [
+    "Your Month-by-Month",
+    "{year} Roadmap"
+   ]
+  },
+  {
+   "id": "summary",
+   "num": "03",
+   "title": "Your Final Summary for {year}",
+   "subtitle": "The year across eight areas of life",
+   "opener": [
+    "Your Final Summary",
+    "for {year}"
+   ]
+  },
+  {
+   "id": "transits",
+   "num": "04",
+   "title": "{year} Transit Impact On YOU!!",
+   "subtitle": "Planetary movements & their effect",
+   "opener": [
+    "{year} Transit Impact",
+    "On YOU!!"
+   ]
+  },
+  {
+   "id": "energies",
+   "num": "05",
+   "title": "The Energies Working For You & Against You",
+   "subtitle": "Lucky & unlucky dates, colours, days · Rudraksha · Gemstones",
+   "opener": [
+    "The Energies Working",
+    "For You & Against You"
+   ]
+  },
+  {
+   "id": "dodont",
+   "num": "06",
+   "title": "What You Should Embrace & What You Must Avoid",
+   "subtitle": "An actionable framework",
+   "opener": [
+    "What You Should Embrace",
+    "& What You Must Avoid"
+   ]
+  },
+  {
+   "id": "remedies",
+   "num": "07",
+   "title": "Your Spiritual Remedies for {year}",
+   "subtitle": "Practices crafted for your chart",
+   "opener": [
+    "Your Spiritual",
+    "Remedies for {year}"
+   ]
+  },
+  {
+   "id": "light",
+   "num": "08",
+   "title": "Your Light for the Year Ahead",
+   "subtitle": "Affirmation, ritual & guidance",
+   "opener": [
+    "Your Light for",
+    "the Year Ahead"
+   ]
+  },
+  {
+   "id": "closing",
+   "num": "09",
+   "title": "Before You Step into {year}",
+   "subtitle": "A closing note from Diva Pratihast",
+   "opener": [
+    "Before You Step",
+    "into {year}"
+   ]
+  },
+  {
+   "id": "consult",
+   "num": "10",
+   "title": "Still Unsure? Book Your Personal Consultation",
+   "subtitle": "A private invitation"
+  }
+ ],
+ "transits": {
+  "_note": "Sidereal (Lahiri) signs. Dates are MM-DD. Taken from published 2027 ephemeris summaries (ganeshaspeaks.com, vedicmarga.com) - the astrologer must confirm every date before release. Jupiter is retrograde into Cancer on 01-25.",
+  "jupiter": [
+   {
+    "from": "01-01",
+    "to": "01-25",
+    "sign": "Leo"
+   },
+   {
+    "from": "01-25",
+    "to": "06-26",
+    "sign": "Cancer"
+   },
+   {
+    "from": "06-26",
+    "to": "11-26",
+    "sign": "Leo"
+   },
+   {
+    "from": "11-26",
+    "to": "12-31",
+    "sign": "Virgo"
+   }
+  ],
+  "saturn": [
+   {
+    "from": "01-01",
+    "to": "06-03",
+    "sign": "Pisces"
+   },
+   {
+    "from": "06-03",
+    "to": "10-20",
+    "sign": "Aries"
+   },
+   {
+    "from": "10-20",
+    "to": "12-31",
+    "sign": "Pisces"
+   }
+  ],
+  "rahu": [
+   {
+    "from": "01-01",
+    "to": "12-31",
+    "sign": "Capricorn"
+   }
+  ],
+  "ketu": [
+   {
+    "from": "01-01",
+    "to": "12-31",
+    "sign": "Cancer"
+   }
+  ]
+ },
+ "contact": {
+  "whatsapp_label": "WhatsApp · +91 9311620907",
+  "phone": "+91 9311620907",
+  "website": "www.divapratihast.com"
+ },
+ "back_cover": [
+  "Diva Pratihast is an award-winning astrologer and numerologist renowned for her accurate predictions and transformative insights. Combining Astrology, Numerology, and Lal Kitab, she helps people overcome challenges and realign with their true path.",
+  "Her expertise in Nameology reveals how your name and numbers shape your love, career and destiny. With compassion and clarity, Diva and her team have been guiding thousands to live with purpose and confidence."
+ ],
+ "back_cover_tagline": "Experience the power of alignment with Team Diva.",
+ "colours": {
+  "Baby Pink": "#f4c2c9",
+  "Black": "#16161a",
+  "Bright Red": "#e0262c",
+  "Bright Silver": "#d5d8dc",
+  "Charcoal Black": "#2b2b30",
+  "Crimson red": "#b0172f",
+  "Dark Brown": "#3d2a1e",
+  "Dark Green": "#1f4a2e",
+  "Dark Grey": "#4a4a50",
+  "Dark Navy": "#131d3f",
+  "Dark Red": "#7a1016",
+  "Deep Blue": "#1b3a8c",
+  "Deep Maroon": "#5a1022",
+  "Earthy Beige": "#c9b594",
+  "Electric Blue": "#1f6bff",
+  "Emerald Green": "#1e8f5a",
+  "Forest Green": "#24583a",
+  "Gold": "#d4af37",
+  "Golden Yellow": "#f2c230",
+  "Greyish brown": "#6b5f52",
+  "muddy green": "#5a5e3a",
+  "Indigo": "#3a3a9a",
+  "Lavender": "#b9a8e6",
+  "Mint Green": "#9ee0c0",
+  "Muddy Brown": "#5c4630",
+  "Muddy Grey": "#6d6a63",
+  "Muddy Olive": "#6a6a35",
+  "Muddy Orange": "#a8632a",
+  "Ocean Blue": "#1c6fb0",
+  "Pastel Pink": "#f5cfd9",
+  "Pearl White": "#f1eee6",
+  "Rose Gold": "#d9a08d",
+  "Sky Blue": "#86c5ee",
+  "Smoky Grey": "#77777d",
+  "Soft Blue": "#a9c7ea",
+  "Soft Cream": "#f3e8cf",
+  "Soft Green": "#a9d3a3",
+  "Steel Grey": "#7b8794",
+  "Sunrise Yellow": "#ffcf5a",
+  "Turquoise": "#2bb7b3",
+  "Warm Orange": "#f08a3c",
+  "Yellow": "#f5d21f",
+  "warm gold": "#d9a441",
+  "bright coral": "#ff6f5e",
+  "Amber": "#ffbf00",
+  "Aqua Blue": "#48c9d6",
+  "Ash Brown": "#7a6a5c",
+  "Ash Green": "#8a9a85",
+  "Blush Peach": "#f6c6b0",
+  "Champagne Cream": "#f3e1c3",
+  "Charcoal Grey": "#3d3d43",
+  "Copper": "#b87333",
+  "Cream Yellow": "#f7ecb5",
+  "Dark Maroon": "#4a0f1c",
+  "Deep Khaki": "#8a7f4a",
+  "Deep Navy": "#0f1a3a",
+  "Deep Red": "#8c0f1a",
+  "Deep Teal": "#0e5a5c",
+  "Dull Black": "#26262a",
+  "Leaf Green": "#4caf50",
+  "Lemon Yellow": "#f7e463",
+  "Midnight Blue": "#141a4a",
+  "Mustard Brown": "#8a6a1f",
+  "Pearl Grey": "#cfd0d3",
+  "Pine Green": "#1f5a3d",
+  "Pistachio Green": "#a9d18e",
+  "Rose Beige": "#e6c9bd",
+  "Royal Purple": "#5b2a9a",
+  "Saffron Orange": "#f4801f",
+  "Silver Lilac": "#c9c0dc",
+  "Smoky Black": "#2a2a2e",
+  "Smoky Violet": "#5e4b73",
+  "Soft Gold": "#dcc27a",
+  "Soft Yellow": "#f8e9a1",
+  "Warm Cream": "#f5e6c8",
+  "Wine": "#6d1a36"
+ }
+}

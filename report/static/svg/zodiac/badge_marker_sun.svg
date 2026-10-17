@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="17.05 0.9 6.3 6.6" width="6.3mm" height="6.6mm">
+<title>badge marker sun</title>
+<desc>Small sun marker used on the Sun-sign badge</desc>
+<defs><radialGradient id="rSun" cx=".4" cy=".36" r=".8"><stop offset="0" stop-color="#fff7dc"/><stop offset=".5" stop-color="#f0cf85"/><stop offset="1" stop-color="#b98a3e"/></radialGradient></defs>
+<circle cx="20.2" cy="4.2" r="1.7" fill="url(#rSun)"/><path d="M20.2,2L20.2,1.1 M21.49,2.42L22.02,1.69 M22.29,3.52L23.15,3.24 M22.29,4.88L23.15,5.16 M21.49,5.98L22.02,6.71 M20.2,6.4L20.2,7.3 M18.91,5.98L18.38,6.71 M18.11,4.88L17.25,5.16 M18.11,3.52L17.25,3.24 M18.91,2.42L18.38,1.69" fill="none" stroke="#f3dfae" stroke-width="0.14" opacity="0.9" stroke-linecap="round"/>
+</svg>

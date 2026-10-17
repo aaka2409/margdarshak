@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8.86 -8.86 47.72 47.72" width="47.72mm" height="47.72mm">
+<title>water drop medallion</title>
+<desc>Water drop in gold ring medallion (Remedy 02)</desc>
+<defs><linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e8bd"/><stop offset=".45" stop-color="#d3b274"/><stop offset="1" stop-color="#8f6e3a"/></linearGradient><radialGradient id="rGoldGlow"><stop offset="0" stop-color="#e9c98a" stop-opacity=".55"/><stop offset=".4" stop-color="#d3b274" stop-opacity=".18"/><stop offset="1" stop-color="#d3b274" stop-opacity="0"/></radialGradient></defs>
+<circle cx="15" cy="15" r="23.56" fill="url(#rGoldGlow)" opacity="0.35"/><circle cx="15" cy="15" r="12.4" fill="#080b16" stroke="url(#gGold)" stroke-width="0.372"/><circle cx="15" cy="15" r="10.66" fill="none" stroke="#cfae6e" stroke-width="0.14880000000000002" opacity="0.4" stroke-dasharray="0.25 1.12"/><path d="M15,6.6 C18.6,11.4 20.6,14.2 20.6,17.2 A5.6,5.6 0 0 1 9.4,17.2 C9.4,14.2 11.4,11.4 15,6.6Z" fill="#0b1226" stroke="url(#gGold)" stroke-width="0.5" stroke-linejoin="round"/><path d="M12.2,17.4 A2.9,2.9 0 0 0 14.6,20.2" fill="none" stroke="#a9bde0" stroke-width="0.4" stroke-linecap="round"/>
+</svg>

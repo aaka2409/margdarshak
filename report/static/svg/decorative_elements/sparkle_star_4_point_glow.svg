@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16.2 -16.2 32.4 32.4" width="32.4mm" height="32.4mm">
+<title>sparkle star 4 point glow</title>
+<desc>Four-point sparkle with soft halo</desc>
+<defs><radialGradient id="rStar"><stop offset="0" stop-color="#fff6de" stop-opacity=".95"/><stop offset=".18" stop-color="#ffe9b8" stop-opacity=".45"/><stop offset=".5" stop-color="#e9c98a" stop-opacity=".12"/><stop offset="1" stop-color="#e9c98a" stop-opacity="0"/></radialGradient></defs>
+<g opacity="1"><circle cx="0" cy="0" r="16" fill="url(#rStar)"/><path d="M0,-4 Q0.45,-0.45 4,0 Q0.45,0.45 0,4 Q-0.45,0.45 -4,0 Q-0.45,-0.45 0,-4Z" fill="#ece6d6"/></g>
+</svg>

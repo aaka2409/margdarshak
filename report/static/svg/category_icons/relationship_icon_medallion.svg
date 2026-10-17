@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-10.16 -10.16 44.32 44.32" width="44.32mm" height="44.32mm">
+<title>relationship icon medallion</title>
+<desc>Relationship icon in a gold ring medallion with glow</desc>
+<defs><linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e8bd"/><stop offset=".45" stop-color="#d3b274"/><stop offset="1" stop-color="#8f6e3a"/></linearGradient><radialGradient id="rGoldGlow"><stop offset="0" stop-color="#e9c98a" stop-opacity=".55"/><stop offset=".4" stop-color="#d3b274" stop-opacity=".18"/><stop offset="1" stop-color="#d3b274" stop-opacity="0"/></radialGradient></defs>
+<circle cx="12" cy="12" r="21.66" fill="url(#rGoldGlow)" opacity="0.35"/><circle cx="12" cy="12" r="11.4" fill="#080b16" stroke="url(#gGold)" stroke-width="0.34199999999999997"/><circle cx="12" cy="12" r="9.8" fill="none" stroke="#cfae6e" stroke-width="0.1368" opacity="0.4" stroke-dasharray="0.23 1.03"/><g transform="translate(0.03,0.03) scale(1)"><circle cx="9" cy="12" r="6" fill="none" stroke="#cfae6e" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="12" r="6" fill="none" stroke="#cfae6e" stroke-width="1.0" stroke-linecap="round" stroke-linejoin="round"/><path d="M12,9.7 Q12.26,11.74 14.3,12 Q12.26,12.26 12,14.3 Q11.74,12.26 9.7,12 Q11.74,11.74 12,9.7Z" fill="#cfae6e"/></g>
+</svg>

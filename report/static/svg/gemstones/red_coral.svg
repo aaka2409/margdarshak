@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-26.6 -26.6 53.2 53.2" width="53.2mm" height="53.2mm">
+<title>red coral</title>
+<desc>Red coral: oval cabochon with highlight and gold rim</desc>
+<defs><linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7e8bd"/><stop offset=".45" stop-color="#d3b274"/><stop offset="1" stop-color="#8f6e3a"/></linearGradient><radialGradient id="rCoral" cx=".38" cy=".3" r=".9"><stop offset="0" stop-color="#ff9a78"/><stop offset=".5" stop-color="#d93a26"/><stop offset="1" stop-color="#6e120c"/></radialGradient><radialGradient id="rGoldGlow"><stop offset="0" stop-color="#e9c98a" stop-opacity=".55"/><stop offset=".4" stop-color="#d3b274" stop-opacity=".18"/><stop offset="1" stop-color="#d3b274" stop-opacity="0"/></radialGradient></defs>
+<circle cx="0" cy="0" r="26.1" fill="url(#rGoldGlow)" opacity="0.3"/><ellipse cx="0" cy="0" rx="11.31" ry="14.5" fill="url(#rCoral)"/><ellipse cx="-3.48" cy="-6.09" rx="2.03" ry="4.35" fill="#ffd9c8" opacity="0.7" transform="rotate(20 -3.48 -6.09)"/><ellipse cx="0" cy="0" rx="11.31" ry="14.5" fill="none" stroke="url(#gGold)" stroke-width="0.6525"/>
+</svg>

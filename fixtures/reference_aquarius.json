@@ -1,0 +1,9 @@
+{
+ "_note": "Layout-check fixture: the same signs and Mulank as the approved 2026 reference PDF, so pages can be compared one to one.",
+ "name": "Devansh Verma", "dob": "16/01/2002", "tob": "10:50", "pob": "Karnal", "sex": "Male",
+ "lat": 29.6857, "lon": 76.9905, "tz": 5.5, "email": "", "user_id": "ref",
+ "chart": {"moon_sign": "Aquarius", "sun_sign": "Capricorn", "ascendant": "Pisces", "ascendant_lord": "Jupiter",
+  "rasi_lord": "Saturn", "nakshatra": "Dhanista", "nakshatra_lord": "Mars", "tithi": "S.Tritiya", "yoga": "Vyatipata",
+  "karana": "Garaja", "gana": "rakshas", "yoni": "lion", "nadi": "Madhya", "varna": "Shudra", "vasya": "Manava",
+  "paya": "Iron", "tatva": "Vayu (Air)"}
+}

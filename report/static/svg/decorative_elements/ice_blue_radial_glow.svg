@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 -20 40 40" width="40mm" height="40mm">
+<title>ice blue radial glow</title>
+<desc>Ice-blue radial glow (gradient disc)</desc>
+<defs><radialGradient id="rIceGlow"><stop offset="0" stop-color="#b9cdf0" stop-opacity=".5"/><stop offset="1" stop-color="#b9cdf0" stop-opacity="0"/></radialGradient></defs>
+<circle cx="0" cy="0" r="20" fill="url(#rIceGlow)"/>
+</svg>

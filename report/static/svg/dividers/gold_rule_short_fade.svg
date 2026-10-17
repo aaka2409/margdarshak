@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.9 60 2" width="60mm" height="2mm">
+<title>gold rule short fade</title>
+<desc>Short title rule fading to the right (60 x 0.2 mm, centred in a 2 mm tall canvas)</desc>
+<defs><linearGradient id="gRuleS" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cfae6e" stop-opacity="0.85"/><stop offset="1" stop-color="#cfae6e" stop-opacity="0"/></linearGradient></defs>
+<rect x="0" y="0" width="60" height="0.2" fill="url(#gRuleS)"/>
+</svg>

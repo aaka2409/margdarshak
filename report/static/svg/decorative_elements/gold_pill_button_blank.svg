@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 78 9.6" width="78mm" height="9.6mm">
+<title>gold pill button blank</title>
+<desc>Gold pill button shape (call-to-action), without its label</desc>
+<defs><linearGradient id="gChipBest" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3dfae"/><stop offset="1" stop-color="#c9a565"/></linearGradient></defs>
+<rect x="0" y="0" width="78" height="9.6" rx="4.8" fill="url(#gChipBest)"/>
+</svg>

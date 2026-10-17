@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="17.1 1.7 6.2 4" width="6.2mm" height="4mm">
+<title>badge marker rising arrow</title>
+<desc>Small rising-arrow marker used on the Ascendant badge</desc>
+<path d="M17.4,5.4 H23 M20.2,2.2 L20.2,5.4 M18.6,3.6 L20.2,2.0 L21.8,3.6" fill="none" stroke="#f3dfae" stroke-width="0.26" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
