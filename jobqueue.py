@@ -143,6 +143,20 @@ def stats(conn) -> dict:
     return out
 
 
+def retry_one(conn, job_id: int) -> str:
+    """Put ONE failed job back in the queue.  Returns "requeued", "not_found", or the job's current status
+    when it is not failed (a queued, running or done job is never touched, so nobody gets a report twice)."""
+    with tx(conn):
+        row = conn.execute("SELECT status FROM jobs WHERE id=?", (job_id,)).fetchone()
+        if not row:
+            return "not_found"
+        if row["status"] != FAILED:
+            return row["status"]
+        conn.execute("UPDATE jobs SET status='queued', attempts=0, run_after=0, error=NULL, worker=NULL, updated_at=? WHERE id=?",
+                     (time.time(), job_id))
+        return "requeued"
+
+
 def retry_failed(conn) -> int:
     """Put every failed job back in the queue (after you fixed the cause).  Their attempt counter restarts."""
     with tx(conn):

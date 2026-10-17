@@ -114,6 +114,23 @@ def job_status(job_id: int):
     return jsonify(status="success", job=job)
 
 
+@app.post("/jobs/<int:job_id>/retry")
+def job_retry(job_id: int):
+    """Run a FAILED order again (after the cause - mail, chart API, ... - is fixed).  Other states are left alone."""
+    if not _authorised():
+        return jsonify(status="error", message="unauthorised"), 401
+    conn = jq.connect()
+    try:
+        result = jq.retry_one(conn, job_id)
+    finally:
+        conn.close()
+    if result == "not_found":
+        return jsonify(status="error", message="no such job"), 404
+    if result != "requeued":
+        return jsonify(status="error", message=f"only a failed job can be retried; this one is {result}"), 409
+    return jsonify(status="success", job_id=job_id, message="queued again"), 200
+
+
 @app.get("/queue")
 def queue_stats():
     if not _authorised():
