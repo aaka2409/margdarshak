@@ -112,10 +112,15 @@ def erase_cover_placeholder(img: Image.Image, region=(0.20, 0.822, 0.80, 0.935))
 
 
 def sharpen(img: Image.Image, amount: float = 1.0, radius: float = 1.6) -> Image.Image:
-    a = np.array(img.convert("RGB")).astype(np.float32)
-    b = cv2.GaussianBlur(a, (0, 0), radius)
-    fine = cv2.GaussianBlur(a, (0, 0), 0.7)                      # second, finer pass for small detail
-    return Image.fromarray(np.clip(a + (a - b) * amount + (a - fine) * 0.6, 0, 255).astype(np.uint8))
+    """Clean up soft, blotchy artwork: edge-preserving smoothing (removes the JPEG / upscaling blotches), then
+    two-scale sharpening of the brightness only, so edges get crisp without colour noise."""
+    a = cv2.bilateralFilter(np.array(img.convert("RGB")), 7, 14, 4)
+    lab = cv2.cvtColor(a, cv2.COLOR_RGB2LAB).astype(np.float32)
+    L = lab[..., 0]
+    for r, k in ((0.9, 1.1 * amount), (2.4, 0.7 * amount)):
+        L = L + (L - cv2.GaussianBlur(L, (0, 0), r)) * k
+    lab[..., 0] = np.clip(L, 0, 255)
+    return Image.fromarray(cv2.cvtColor(lab.astype(np.uint8), cv2.COLOR_LAB2RGB))
 
 
 # ------------------------------------------------------------------ gemstone pictures

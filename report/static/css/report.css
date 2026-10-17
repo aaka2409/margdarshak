@@ -284,7 +284,7 @@ p.has-dc::after { content: ""; display: block; clear: both; height: 0; }
 .lean .l { display: flex; flex-wrap: wrap; gap: 3pt 11pt; margin-top: 12pt; font: 300 7.6pt/11pt var(--sans); color: var(--body); }
 .lean .l span { margin-right: 11pt; white-space: nowrap; }
 
-.pill { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 11.5pt; padding: 0 12pt 0 calc(12pt + .26em); border-radius: 6pt;
+.pill { flex: none; display: inline-flex; align-items: center; justify-content: center; height: 11.5pt; padding: 2.8pt 12pt 0 calc(12pt + .26em); border-radius: 6pt;
         font: 600 4.4pt/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; white-space: nowrap; }
 .pill-best { background: linear-gradient(180deg, #e9cf94, #c9a565); color: #191104; }
 .pill-good { background: #2b3f88; color: #dbe4ff; }
@@ -464,3 +464,6 @@ p.closing.sep { border-top: .6pt solid var(--line); margin-top: 14pt; padding-to
 /* centred, letter-spaced labels: the space after the last letter would push the text left, so balance it */
 .sign-card .eyebrow, .const-card .eyebrow, .consult-card .eyebrow, .running-center, .grid .hd span, .jbar .mm span { padding-left: var(--track); }
 .pill { text-indent: 0; }
+
+.serif-body .sig-r { margin: 6pt 0 0; text-align: right; }
+.serif-body .sig-r em { font: 400 30pt/1.1 var(--script); font-style: normal; color: var(--gold-light); }
