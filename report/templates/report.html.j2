@@ -11,7 +11,7 @@
 {%- endmacro -%}
 
 {%- macro running(text) -%}
-<div class="running"><span>Namastro</span><span class="txt">{{ text }}</span></div>
+<div class="running"><span class="txt">{{ text }}</span></div>
 {%- endmacro -%}
 
 {%- macro sec_head(num, eyebrow, title_lines, emblem) -%}
@@ -31,7 +31,10 @@
 
 {#- Painted full-page opener; the title is part of the picture (static/img/chapters/chNN.jpg, see tools/import_assets.py). -#}
 {%- macro chapter(ch, n) -%}
-<div class="page chapter" data-toc="{{ ch.id }}" data-chap="{{ ch.title }}" style="background-image:url('{{ S }}/img/chapters/ch{{ '%02d' % n }}.jpg')"></div>
+{%- set _y = chapter_title_y.get('%02d' % n) -%}
+<div class="page chapter" data-toc="{{ ch.id }}" data-chap="{{ ch.title }}" style="background-image:url('{{ S }}/img/chapters/ch{{ '%02d' % n }}.jpg')">
+  {% if _y is not none and ch.opener %}<div class="ct" style="top:{{ _y }}pt"><div class="l1">{{ ch.opener[0] }}</div><div class="l2">{{ ch.opener[1] }}</div><div class="rule"><i></i><b></b><i></i></div></div>{% endif %}
+</div>
 {%- endmacro -%}
 
 {%- macro page_art(path, x, y, w) -%}
@@ -64,10 +67,9 @@
   {#- the painted cover carries a placeholder name/date: cover it and write the customer's own -#}
   {%- set _l = person.name|length -%}
   {%- set _sz = 28 if _l <= 14 else (24 if _l <= 20 else (20 if _l <= 26 else (17 if _l <= 34 else 14))) -%}
-  <div class="mask"></div>
   <div class="id">
     <div class="for">FOR</div>
-    <div class="nm"><i></i><b style="--nm:{{ _sz }}pt">{{ person.name }}</b><i></i></div>
+    <div class="nm"><i></i><svg viewBox="-10 -10 20 20"><path d="M0,-10 C1.2,-3 3,-1.2 10,0 C3,1.2 1.2,3 0,10 C-1.2,3 -3,1.2 -10,0 C-3,-1.2 -1.2,-3 0,-10Z" fill="#dcc080"/></svg><b style="--nm:{{ _sz }}pt">{{ person.name }}</b><svg viewBox="-10 -10 20 20"><path d="M0,-10 C1.2,-3 3,-1.2 10,0 C3,1.2 1.2,3 0,10 C-1.2,3 -3,1.2 -10,0 C-3,-1.2 -1.2,-3 0,-10Z" fill="#dcc080"/></svg><i></i></div>
     <div class="dob">{{ person.dob|replace("/", "-") }}</div>
   </div>
 </div>
@@ -126,23 +128,25 @@
 
 <div class="page bg-page profile">
   {{ running(chapters.mirror.title) }}
-  <div class="who">
-    <div class="eyebrow">Cosmic identity{% if chart.tatva %} · {{ chart.tatva }}{% endif %}</div>
-    <h1>{{ person.name }}</h1>
-    <div class="born">{{ born_line }}</div>
-  </div>
-  <div class="chips"><span>Asc · {{ asc|title }}</span>{% if sun %}<span>Sun · {{ sun|title }}</span>{% endif %}</div>
-  <div class="cards3">
-    <div class="card sign-card"><div class="glyph">{{ art.glyph_moon|safe }}</div><div class="eyebrow">Moon sign</div><b>{{ moon|title }}</b></div>
-    <div class="card sign-card">{% if sun %}<div class="glyph">{{ art.glyph_sun|safe }}</div><div class="eyebrow">Sun sign</div><b>{{ sun|title }}</b>{% endif %}</div>
-    <div class="card sign-card"><div class="glyph">{{ art.glyph_asc|safe }}</div><div class="eyebrow">Ascendant</div><b>{{ asc|title }}</b></div>
-  </div>
-  <div class="facts">
-    {% for f in profile_rows %}<div class="fact"><div class="k">{{ f.label }}</div><div class="v">{{ f.value }}</div></div>{% endfor %}
-  </div>
-  <div class="card const-card">
-    <div class="eyebrow">Moon sign</div>
-    <b>{{ moon|title }}</b>
+  <div class="stack">
+    <div class="who">
+      <div class="eyebrow">Cosmic identity{% if chart.tatva %} · {{ chart.tatva }}{% endif %}</div>
+      <h1>{{ person.name }}</h1>
+      <div class="born">{{ born_line }}</div>
+    </div>
+    <div class="chips"><span>Asc · {{ asc|title }}</span>{% if sun %}<span>Sun · {{ sun|title }}</span>{% endif %}</div>
+    <div class="cards3">
+      <div class="card sign-card"><div class="glyph">{{ art.glyph_moon|safe }}</div><div class="eyebrow">Moon sign</div><b>{{ moon|title }}</b></div>
+      <div class="card sign-card">{% if sun %}<div class="glyph">{{ art.glyph_sun|safe }}</div><div class="eyebrow">Sun sign</div><b>{{ sun|title }}</b>{% endif %}</div>
+      <div class="card sign-card"><div class="glyph">{{ art.glyph_asc|safe }}</div><div class="eyebrow">Ascendant</div><b>{{ asc|title }}</b></div>
+    </div>
+    <div class="facts">
+      {% for f in profile_rows %}<div class="fact"><div class="k">{{ f.label }}</div><div class="v">{{ f.value }}</div></div>{% endfor %}
+    </div>
+    <div class="card const-card">
+      <div class="eyebrow">Moon sign</div>
+      <b>{{ moon|title }}</b>
+    </div>
   </div>
   {{ footer() }}
 </div>
@@ -199,7 +203,7 @@
   {{ page_art("celestial_frames/month_ring_frame_" ~ m.num ~ "_" ~ m.name|lower ~ ".svg", 39.117, 42.1, 131.707) }}
   <div class="count eyebrow">Month {{ m.num }} of 12</div>
   <div class="name">{{ m.name }}</div>
-  {{ page_art("dividers/moon_phase_strip_" ~ m.num ~ "_" ~ m.name|lower ~ ".svg", 40.9, 245.3, 128.2) }}
+  <div class="abs" style="left:40.9mm;top:245.3mm;width:128.2mm">{{ art.month_strips[loop.index0]|safe }}</div>
   {{ footer() }}
 </div>
 

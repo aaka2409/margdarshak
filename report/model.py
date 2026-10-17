@@ -13,7 +13,9 @@ is raised and no report is produced.
 """
 from __future__ import annotations
 
+import json
 import re
+from pathlib import Path
 from dataclasses import dataclass, field
 
 from . import svg
@@ -264,6 +266,13 @@ def build(person: Person, chart: dict, pack: ContentPack) -> dict:
     ctx["affirmation"] = {**aff, "ritual_emblem": svg.icon_emblem(kind)}
 
     # ---- artwork that carries the customer's signs ------------------------------------------
+    # where the painted openers had their title (pt from the page top); the template prints the live title there
+    try:
+        boxes = json.loads((Path(__file__).parent / "data" / "chapter_titles.json").read_text(encoding="utf-8"))
+        ctx["chapter_title_y"] = {k: round(v[1] * 841.9 / 2339 - 2, 1) for k, v in boxes.items() if v}
+    except (OSError, ValueError):
+        ctx["chapter_title_y"] = {}
+
     ctx["art"] = {
         "defs": svg.shared_defs(),
         "cover_wheel": svg.cover_wheel(moon), "back_ring": svg.back_ring(moon),
@@ -278,6 +287,7 @@ def build(person: Person, chart: dict, pack: ContentPack) -> dict:
         "glyph_asc": svg.sign_icon(asc, 6, svg.GOLD_LIGHT),
         "indicator": {lvl: svg.indicator(lvl, 0.7) for lvl in svg.LEVELS},
         "indicator_small": {lvl: svg.indicator(lvl, 0.36) for lvl in svg.LEVELS},
+        "month_strips": [svg.month_strip(i) for i in range(1, 13)],
         "moon_emblems": [svg.moon_emblem(i) for i in range(1, 13)],
         "moon_small": [svg.wrap((-11, -11, 22, 22), svg.moon(0, 0, 10, i, 12), cls="moon-small") for i in range(1, 13)],
         "toc_moons": [svg.wrap((-11, -11, 22, 22), svg.moon(0, 0, 10, i + 1, 11, glow=0.3 if i == 10 else 0), cls="moon-small")

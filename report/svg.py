@@ -58,8 +58,23 @@ def shared_defs() -> str:
     for path in sorted(STATIC.rglob("*.svg")):
         for m in pattern.finditer(path.read_text(encoding="utf-8")):
             seen.setdefault(m.group(2), m.group(0))
+    seen.update(_MOON_DEFS)
     return ('<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" class="svg-defs" aria-hidden="true">'
             f'<defs>{"".join(seen[k] for k in sorted(seen))}</defs></svg>')
+
+
+# white-silver moon (lit side, night side, halo) shared by every moon drawn below
+_MOON_DEFS = {
+    "rMoonLit": '<radialGradient id="rMoonLit" cx="0.62" cy="0.42" r="0.75"><stop offset="0" stop-color="#ffffff"/>'
+                '<stop offset=".55" stop-color="#e4ecfb"/><stop offset="1" stop-color="#b9c8e6"/></radialGradient>',
+    "rMoonDark": '<radialGradient id="rMoonDark" cx="0.4" cy="0.4" r="0.8"><stop offset="0" stop-color="#27385f"/>'
+                 '<stop offset="1" stop-color="#0c1430"/></radialGradient>',
+    "rMoonGlow": '<radialGradient id="rMoonGlow"><stop offset="0" stop-color="#cfe0ff" stop-opacity=".6"/>'
+                 '<stop offset=".45" stop-color="#a9c2f5" stop-opacity=".2"/><stop offset="1" stop-color="#a9c2f5" stop-opacity="0"/></radialGradient>',
+}
+_CRATERS = [(-.28, -.30, .22, .17), (.22, -.40, .14, .12), (.38, .04, .20, .16), (-.08, .22, .26, .20),
+            (.18, .52, .12, .10), (-.50, .08, .12, .10), (.50, -.22, .10, .08), (-.30, .55, .10, .08)]
+_moon_ids = iter(range(10 ** 9))
 
 
 @lru_cache(maxsize=None)
@@ -103,22 +118,45 @@ def star(cx, cy, size: str = "mid", k: float = 1.0) -> str:
 
 
 def moon(cx, cy, r, step: int, of: int = 12, glow: float = 0.0) -> str:
-    """Moon phase `step` of `of` (1 = thin crescent ... of = full), gold on a dark disc."""
+    """Moon phase `step` of `of` (1 = thin crescent ... of = full): white-silver with soft craters on a dark disc."""
     f = max(0.0, min(1.0, step / of))
     rx = r * abs(1 - 2 * f)
     sweep = 0 if f < 0.5 else 1
     out = ""
     if glow:
-        out += f'<circle cx="{n(cx)}" cy="{n(cy)}" r="{n(r * 2.1)}" fill="url(#rGoldGlow)" opacity="{n(glow)}"/>'
-    out += f'<circle cx="{n(cx)}" cy="{n(cy)}" r="{n(r)}" fill="#090c17"/>'
+        out += f'<circle cx="{n(cx)}" cy="{n(cy)}" r="{n(r * 2.1)}" fill="url(#rMoonGlow)" opacity="{n(min(1.0, glow * 2.2))}"/>'
+    out += f'<circle cx="{n(cx)}" cy="{n(cy)}" r="{n(r)}" fill="url(#rMoonDark)"/>'
+    craters = lambda col, op: "".join(  # noqa: E731
+        f'<ellipse cx="{n(cx + a * r)}" cy="{n(cy + b * r)}" rx="{n(c * r)}" ry="{n(d * r)}" fill="{col}" opacity="{op}"/>'
+        for a, b, c, d in _CRATERS)
+    out += craters("#7f93bb", "0.16")
     if f >= 0.999:
-        out += f'<circle cx="{n(cx)}" cy="{n(cy)}" r="{n(r)}" fill="url(#gGold)"/>'
+        lit = f'<circle cx="{n(cx)}" cy="{n(cy)}" r="{n(r)}"/>'
     else:
-        out += (f'<path d="M{n(cx)},{n(cy - r)} A{n(r)},{n(r)} 0 0 1 {n(cx)},{n(cy + r)} '
-                f'A{n(rx)},{n(r)} 0 0 {sweep} {n(cx)},{n(cy - r)}Z" fill="url(#gGold)"/>')
-    out += (f'<circle cx="{n(cx)}" cy="{n(cy)}" r="{n(r)}" fill="none" stroke="{GOLD}" '
-            f'stroke-width="{n(r * 0.035)}" opacity="0.55"/>')
+        lit = (f'<path d="M{n(cx)},{n(cy - r)} A{n(r)},{n(r)} 0 0 1 {n(cx)},{n(cy + r)} '
+               f'A{n(rx)},{n(r)} 0 0 {sweep} {n(cx)},{n(cy - r)}Z"/>')
+    cid = f"mc{next(_moon_ids)}"
+    out += (f'<clipPath id="{cid}">{lit}</clipPath>'
+            f'<g clip-path="url(#{cid})"><circle cx="{n(cx)}" cy="{n(cy)}" r="{n(r)}" fill="url(#rMoonLit)"/>'
+            f'{craters("#8da0c6", "0.5")}</g>')
+    out += (f'<circle cx="{n(cx)}" cy="{n(cy)}" r="{n(r)}" fill="none" stroke="#cfd9f0" '
+            f'stroke-width="{n(r * 0.03)}" opacity="0.5"/>')
     return out
+
+
+def month_strip(index: int) -> str:
+    """Row of the twelve moon phases with month `index` (1-12) ringed and glowing, under the month opener's moon."""
+    o = ['<path d="M41.3,252 L48.3,251.88 L48.3,252.12Z" fill="#cfae6e" opacity="0.6"/>',
+         '<path d="M168.7,252 L161.7,251.88 L161.7,252.12Z" fill="#cfae6e" opacity="0.6"/>']
+    for k in range(12):
+        cx = 53.3 + 9.4 * k
+        if k + 1 == index:
+            o.append(f'<circle cx="{n(cx)}" cy="252" r="4.4" fill="none" stroke="#e8efff" stroke-width="0.14"/>'
+                     f'<circle cx="{n(cx)}" cy="252" r="6.3" fill="url(#rMoonGlow)" opacity="0.5"/>' + moon(cx, 252, 3, k + 1, 12))
+        else:
+            o.append(f'<g opacity="0.62">{moon(cx, 252, 2.3, k + 1, 12)}</g>')
+    return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="40.9 245.3 128.2 13.4" width="128.2mm" height="13.4mm" '
+            f'aria-hidden="true">{"".join(o)}</svg>')
 
 
 def text(x, y, s, size, family=SERIF, fill=IVORY, anchor="start", weight=None, style=None,
@@ -457,6 +495,12 @@ def kundali_houses(active: list[int]) -> str:
 
 
 # --------------------------------------------------------------------------- lucky / unlucky visuals
+def _cross(cx, cy, d, w) -> str:
+    """A cross (X) of two lines through (cx, cy), reaching d either way."""
+    return (f'<path d="M{n(cx - d)},{n(cy - d)} L{n(cx + d)},{n(cy + d)} M{n(cx - d)},{n(cy + d)} L{n(cx + d)},{n(cy - d)}" '
+            f'stroke="#e9e4d6" stroke-width="{w}" stroke-linecap="round" fill="none" opacity="0.92"/>')
+
+
 def calendar(dates: list[int], lucky: bool = True) -> str:
     """31-day grid with the given dates marked: glowing gold (lucky) or struck through (unlucky)."""
     mark = set(dates)
@@ -470,7 +514,7 @@ def calendar(dates: list[int], lucky: bool = True) -> str:
         elif d in mark:
             o.append(f'<circle cx="{cx}" cy="{cy}" r="3.3" fill="#05060c" stroke="{ASH}" stroke-width="0.24"/>')
             o.append(text(cx, cy + 1.0, d, 2.9, SERIF, "#d6d1c4", "middle", 500))
-            o.append(f'<line x1="{n(cx - 2.6)}" y1="{n(cy + 2.6)}" x2="{n(cx + 2.6)}" y2="{n(cy - 2.6)}" stroke="{ASH}" stroke-width="0.22" opacity="0.85"/>')
+            o.append(_cross(cx, cy, 2.6, 0.26))
         else:
             o.append(f'<circle cx="{cx}" cy="{cy}" r="3.1" fill="none" stroke="{GOLD}" stroke-width="0.08" opacity="0.3"/>')
             o.append(text(cx, cy + 0.85, d, 2.45, SERIF, GOLD, "middle", 500, opacity=0.7))
@@ -491,7 +535,8 @@ def swatches(colours: list[str | None], lucky: bool = True) -> str:
                  f'<circle cx="{n(cx)}" cy="20" r="9.2" fill="url(#rShade)" opacity="0.8"/>'
                  f'<circle cx="{n(cx)}" cy="20" r="9.2" fill="none" stroke="{"url(#gGold)" if lucky else "#8a8478"}" stroke-width="0.24"/>')
     if not lucky:
-        o.append(f'<line x1="{n(x0 - 8.3)}" y1="33" x2="{n(x0 + (count - 1) * step + 8.3)}" y2="7" stroke="{ASH}" stroke-width="0.2" opacity="0.7"/>')
+        for i in range(len(colours)):               # a full cross (X) over every colour to avoid
+            o.append(_cross(x0 + i * step, 20, 6.4, 0.5))
     half = step * (count - 1) / 2 + 12.3
     return wrap((30 - half, 7.5, 2 * half, 25), "".join(o), cls="swatches")
 
