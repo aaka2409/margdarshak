@@ -31,8 +31,8 @@ ASH = "#b7b0a1"
 MUTED = "#8e8b88"
 NIGHT = "#080b16"
 
-SERIF = "'Cormorant Garamond', serif"
-SANS = "'DM Sans', sans-serif"
+SERIF = "'Poppins', sans-serif"
+SANS = "'Poppins', sans-serif"
 
 
 def n(v: float) -> str:
@@ -141,31 +141,33 @@ PT = 25.4 / 72  # one point in millimetres
 
 
 # --------------------------------------------------------------------------- zodiac symbols
+_GLYPH_UNITS = 17.0          # drawn size (in 1/20 em) of the longest side of a glyph
 @lru_cache(maxsize=None)
-def _symbol(sign: str) -> tuple[str, float, float]:
+def _symbol(sign: str) -> tuple[str, float, float, float]:
     """(path data, bbox centre x, bbox centre y) of a sign glyph; glyph units are 1/20 em."""
     s = (STATIC / "zodiac" / f"{sign}_zodiac_symbol.svg").read_text(encoding="utf-8")
     x, y, w, h = (float(v) for v in re.search(r'viewBox="([^"]+)"', s).group(1).split())
-    d = re.search(r'<path d="([^"]+)"', s).group(1)
-    return d, x + w / 2, y + h / 2
+    d = re.search(r'<path\b[^>]*?\sd="([^"]+)"', s).group(1)
+    norm = _GLYPH_UNITS / max(w - 12, h - 12, 1.0) if "viewBox" in s and w > 60 else 1.0   # the 2027 artwork is ~330 units wide
+    return d, x + w / 2, y + h / 2, norm
 
 
 def symbol(sign: str, cx, cy, em: float, fill: str = GOLD_LIGHT, opacity: float | None = None) -> str:
     """Sign glyph centred on (cx, cy); `em` is the type size in mm."""
-    d, bx, by = _symbol(sign)
-    k = em / 20
+    d, bx, by, norm = _symbol(sign)
+    k = em / 20 * norm
     op = f' opacity="{n(opacity)}"' if opacity is not None else ""
     return (f'<path transform="translate({n(cx - bx * k)},{n(cy - by * k)}) scale({n(k) if k >= 0.01 else k})" '
-            f'd="{d}" fill="{fill}"{op}/>')
+            f'd="{d}" fill="{fill}" fill-rule="evenodd"{op}/>')
 
 
 def sign_icon(sign: str, em: float = 3.2, fill: str = GOLD) -> str:
     """Small standalone glyph (running head)."""
-    d, bx, by = _symbol(sign)
-    half = 9.2
+    d, bx, by, norm = _symbol(sign)
+    half = 9.2 / norm
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{n(bx - half)} {n(by - half)} {n(2 * half)} {n(2 * half)}" '
             f'width="{n(em * 0.92)}mm" height="{n(em * 0.92)}mm" class="sign-icon" aria-hidden="true">'
-            f'<path d="{d}" fill="{fill}"/></svg>')
+            f'<path d="{d}" fill="{fill}" fill-rule="evenodd"/></svg>')
 
 
 def medallion(cx, cy, r, sign: str, glow: bool = True) -> str:
@@ -594,6 +596,11 @@ _GEM_ALIASES = {"green emerald": "emerald", "pukhraj": "yellow sapphire", "neela
                 "gomed": "hessonite", "panna": "emerald", "manik": "ruby", "heera": "diamond",
                 "moti": "pearl", "moonga": "red coral", "coral": "red coral", "cat’s eye": "cats eye",
                 "cat's eye": "cats eye", "lehsunia": "cats eye"}
+
+
+def gem_slug(name: str) -> str:
+    """File name (without .png) of the stone picture in static/img/gems."""
+    return gem_key(name).replace(" ", "_")
 
 
 def gem_key(name: str) -> str:

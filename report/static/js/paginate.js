@@ -18,8 +18,8 @@
 (function () {
   "use strict";
   const PT = 96 / 72;                       // CSS px per pt
-  const COL_BOTTOM = 763.2;                   // pt from page top: lowest edge of body text
-  const CONT_TOP = 65.2;                    // pt: top of the columns on continuation pages
+  const COL_BOTTOM = 762;                     // pt from page top: lowest edge of body text
+  const CONT_TOP = 145;                     // pt: top of the text on continuation pages (below the "continued" strip)
   const problems = [];
 
   const px = (pt) => pt * PT;
@@ -31,27 +31,52 @@
     shell.querySelector(".running .txt").textContent = flow.dataset.running || "";
     if (flow.dataset.pageClass) shell.classList.add(...flow.dataset.pageClass.split(" "));
     const cols = document.createElement("div");
-    cols.className = "cols prose " + (flow.dataset.cols === "1" ? "one " : "") + (flow.dataset.textClass || "");
-    const count = flow.dataset.cols === "1" ? 1 : 2;
+    const count = flow.dataset.cols === "2" ? 2 : 1;                 // one 11 pt column, as in the book
+    cols.className = "cols prose " + (count === 1 ? "one " : "") + (flow.dataset.textClass || "");
     for (let i = 0; i < count; i++) {
       const c = document.createElement("div");
       c.className = "col";
       cols.appendChild(c);
     }
     let top = CONT_TOP;
+    const tpl = flow.querySelector("template.flow-first");
     if (first) {
-      const head = flow.querySelector("template.flow-first");
-      if (head) shell.appendChild(head.content.cloneNode(true));
+      if (tpl) shell.appendChild(tpl.content.cloneNode(true));
+    } else if (tpl) {                        // "EYEBROW · CONTINUED" strip with the section title
+      const eb = tpl.content.querySelector(".eyebrow"), h1 = tpl.content.querySelector("h1");
+      const strip = document.createElement("div");
+      strip.className = "cont-head";
+      const a = document.createElement("div"); a.className = "eyebrow"; a.textContent = (eb ? eb.textContent : "") + " · Continued";
+      const b = document.createElement("div"); b.className = "t"; b.textContent = h1 ? h1.textContent : "";
+      strip.append(a, b);
+      shell.appendChild(strip);
     }
     shell.appendChild(cols);
     flow.parentNode.insertBefore(shell, flow);
+    fitHeads(shell);
     if (first) {
-      const pre = shell.querySelector(".pre");
-      if (pre) top = pagePt(pre, shell);
+      const pre = shell.querySelector(".pre"), head = shell.querySelector(".sec-head");
+      if (pre) {
+        if (head) pre.style.top = (pagePt(head, shell) + 15) + "pt";
+        top = pagePt(pre, shell);
+      } else if (head) top = pagePt(head, shell) + 15;
     }
     cols.style.top = top + "pt";
     cols.style.height = (COL_BOTTOM - top) + "pt";
     return { page: shell, cols, columns: Array.from(cols.children), top };
+  }
+
+  /* Section titles stay on one line (the rule under them sits at the same height on every page). */
+  function fitHeads(root) {
+    root.querySelectorAll(".sec-head h1").forEach((h) => {
+      let size = 24;
+      const lh = () => parseFloat(getComputedStyle(h).lineHeight);
+      while (h.getBoundingClientRect().height > lh() * 1.5 && size > 15) {
+        size -= 0.5;
+        h.style.fontSize = size + "pt";
+        h.style.lineHeight = (size * 1.2) + "pt";
+      }
+    });
   }
 
   /* ---------------------------------------------------------------- paragraph splitting */
@@ -245,6 +270,7 @@
 
   /* Ornament in the empty space under the last column, as in the design. */
   function addTail(flow, pg) {
+    return;                                   // the book has no ornament under the last column
     if (flow.dataset.tail === "none") return;
     let end = 0;
     pg.columns.forEach((c) => { if (c.lastElementChild) end = Math.max(end, pagePt(c.lastElementChild, pg.page)); });
@@ -292,6 +318,12 @@
   function numberPages() {
     const pages = Array.from(document.querySelectorAll(".page"));
     const first = {};
+    let chap = "";
+    pages.forEach((p, i) => {                  // running head, right side: the chapter the page belongs to
+      if (p.dataset.chap) chap = p.dataset.chap;
+      const t = p.querySelector(".running .txt");
+      if (t && chap) t.textContent = chap;
+    });
     pages.forEach((p, i) => {
       const folio = p.querySelector(".footer .folio");
       if (folio) folio.textContent = String(i + 1).padStart(2, "0");
@@ -308,6 +340,7 @@
     if (document.fonts && document.fonts.ready) await document.fonts.ready;
     await Promise.all(Array.from(document.images).map((img) => img.complete ? null :
       new Promise((res) => { img.onload = img.onerror = res; })));
+    fitHeads(document);
     document.querySelectorAll("section.flow").forEach(pourFlow);
     fitFixedPages();
     const count = numberPages();
@@ -315,7 +348,8 @@
     await Promise.all(Array.from(document.images).map((img) => img.complete ? null :
       new Promise((res) => { img.onload = img.onerror = res; })));
     document.querySelectorAll("img").forEach((img) => { if (!img.naturalWidth) problems.push("image failed to load: " + img.getAttribute("src")); });
-    const fontsOk = ["400 12px 'Cormorant Garamond'", "400 12px 'DM Sans'", "500 12px 'Noto Serif Devanagari'"]
+    const fontsOk = ["300 12px 'Poppins'", "400 12px 'Poppins'", "500 12px 'Poppins'", "italic 300 12px 'Poppins'",
+                     "500 12px 'Cormorant Garamond'", "500 12px 'Noto Serif Devanagari'"]
       .every((f) => document.fonts.check(f, f.indexOf("Devanagari") > 0 ? "म" : "a"));
     if (!fontsOk) problems.push("a report font failed to load");
     window.__report = { pages: count, problems };

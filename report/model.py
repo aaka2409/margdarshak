@@ -247,9 +247,9 @@ def build(person: Person, chart: dict, pack: ContentPack) -> dict:
         desc = gems.get("stones", {}).get(key)
         if not desc:
             raise ContentError(f"gemstones.json: lucky stone '{g}' ({asc}) has no description")
-        lucky_gems.append({"name": g, "text": desc, "art": svg.gem(key)})
+        lucky_gems.append({"name": g, "text": desc, "slug": svg.gem_slug(key)})
     ctx["gems"] = {"lucky": lucky_gems,
-                   "unlucky": [{"name": g, "art": svg.gem_avoid(aliases.get(g, g))} for g in mine.get("unlucky", [])],
+                   "unlucky": [{"name": g, "slug": svg.gem_slug(aliases.get(g, g))} for g in mine.get("unlucky", [])],
                    "process": gems["process"], "emblem": svg.gem_emblem(aliases.get(mine["lucky"][0], mine["lucky"][0]))}
 
     # ---- chapters 06-08 --------------------------------------------------------------------
@@ -273,6 +273,9 @@ def build(person: Person, chart: dict, pack: ContentPack) -> dict:
         "badge_moon": svg.badge(moon, "moon"),
         "badge_sun": svg.badge(sun, "sun") if sun else "",
         "badge_asc": svg.badge(asc, "ascendant"),
+        "glyph_moon": svg.sign_icon(moon, 6, svg.GOLD_LIGHT),
+        "glyph_sun": svg.sign_icon(sun, 6, svg.GOLD_LIGHT) if sun else "",
+        "glyph_asc": svg.sign_icon(asc, 6, svg.GOLD_LIGHT),
         "indicator": {lvl: svg.indicator(lvl, 0.7) for lvl in svg.LEVELS},
         "indicator_small": {lvl: svg.indicator(lvl, 0.36) for lvl in svg.LEVELS},
         "moon_emblems": [svg.moon_emblem(i) for i in range(1, 13)],
