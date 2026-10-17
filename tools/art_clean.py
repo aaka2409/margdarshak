@@ -51,6 +51,31 @@ def _fill_rect(rgb: np.ndarray, x0: int, y0: int, x1: int, y1: int, feather: int
     return (rgb * (1 - soft) + big * soft).astype(np.uint8)
 
 
+def fill_vertical(rgb: np.ndarray, x0: int, y0: int, x1: int, y1: int, feather: int = 36) -> np.ndarray:
+    """Replace a rectangle by a smooth top-to-bottom blend of the (heavily smoothed) rows just above and just below it.
+    Right where a glow rises into the rectangle from below, this carries the glow up and fades it, instead of streaking."""
+    H, W = rgb.shape[:2]
+    x0, y0, x1, y1 = max(0, x0), max(0, y0), min(W, x1), min(H, y1)
+    a = rgb.astype(np.float32)
+    def band(ya, yb):
+        b = np.median(a[ya:yb, :, :], axis=0)                       # (W, 3)
+        return cv2.GaussianBlur(b[None], (0, 0), 70)[0]
+    top, bot = band(max(0, y0 - 40), max(1, y0 - 6)), band(y1 + 6, y1 + 40)
+    bot = np.minimum(bot, top + 10)                                  # do not pull a glow from below up into the sky
+    t = np.clip((np.linspace(0, 1, y1 - y0, dtype=np.float32) - 0.72) / 0.28, 0, 1)[:, None, None]
+    t = t * t * (3 - 2 * t)                                          # flat sky, easing into the picture only at the lower edge
+    fill = top[None] * (1 - t) + bot[None] * t
+    fill = fill + np.random.default_rng(5).normal(0, 1.5, fill.shape).astype(np.float32)
+    mask = np.zeros((H, W), np.float32)
+    mask[y0:y1, x0:x1] = 1
+    if x0 == 0: mask[y0:y1, :feather] = 1
+    soft = cv2.GaussianBlur(mask, (0, 0), feather / 2.5)[..., None]
+    soft[y0:y1, :6] = np.maximum(soft[y0:y1, :6], mask[y0:y1, :6, None])
+    full = a.copy()
+    full[y0:y1] = fill
+    return np.clip(a * (1 - soft) + full * soft, 0, 255).astype(np.uint8)
+
+
 def erase_title(img: Image.Image, pad: int = 34, extra=(0, 0)):
     """Paint the baked title out.  Returns (clean image, (x0, y0, x1, y1) of the removed block or None)."""
     rgb = np.array(img.convert("RGB"))
