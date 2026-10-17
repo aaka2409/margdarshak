@@ -45,6 +45,8 @@ FIXES = {
         ("blur", (0, 1480, 470, 1800), {"feather": 90, "glow": (185, 1655, 60)})],
     8: [("object", (0, 220, 520, 600), {})],           # the ringed planet
 }
+# widen the paint-out where the detector stops short of a wide title (extra px left, right)
+TITLE_EXTRA = {7: (200, 60)}
 GEMS = {"blue_sapphire": "blue_sapphire", "cats_eye": "cats_eye", "diamond": "diamond", "emerald": "emerald",
         "orange_gemstone": "hessonite", "hessonite": "hessonite", "pearl": "pearl", "red_coral": "red_coral",
         "ruby": "ruby", "yellow_sapphire": "yellow_sapphire"}
@@ -113,7 +115,7 @@ def main() -> int:
                     for kind, rect, kw in FIXES.get(i, []):          # retouching of known flaws in the supplied pictures
                         im = (art_clean.fix_blur_patch if kind == "blur" else art_clean.remove_bright_object)(im, rect, **kw)
                     if not a.keep_titles:
-                        im, box = art_clean.erase_title(im)
+                        im, box = art_clean.erase_title(im, extra=TITLE_EXTRA.get(i, (0, 0)))
                         boxes[i] = [int(v) for v in box] if box else None
                     return art_clean.sharpen(im)
                 return prep

@@ -37,10 +37,10 @@
   {
    "id": "summary",
    "num": "03",
-   "title": "Your Final Summary for {year}",
+   "title": "Final Summary for {year}",
    "subtitle": "The year across eight areas of life",
    "opener": [
-    "Your Final Summary",
+    "Final Summary",
     "for {year}"
    ]
   },

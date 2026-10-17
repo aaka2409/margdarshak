@@ -51,14 +51,14 @@ def _fill_rect(rgb: np.ndarray, x0: int, y0: int, x1: int, y1: int, feather: int
     return (rgb * (1 - soft) + big * soft).astype(np.uint8)
 
 
-def erase_title(img: Image.Image, pad: int = 34):
+def erase_title(img: Image.Image, pad: int = 34, extra=(0, 0)):
     """Paint the baked title out.  Returns (clean image, (x0, y0, x1, y1) of the removed block or None)."""
     rgb = np.array(img.convert("RGB"))
     box = find_title_block(rgb)
     if box is None:
         return img, None
     x0, y0, x1, y1 = box
-    out = _fill_rect(rgb, x0 - pad - 30, y0 - pad, x1 + pad + 30, y1 + pad)
+    out = _fill_rect(rgb, x0 - pad - 30 - extra[0], y0 - pad, x1 + pad + 30 + extra[1], y1 + pad)
     return Image.fromarray(out), box
 
 
@@ -111,10 +111,11 @@ def erase_cover_placeholder(img: Image.Image, region=(0.20, 0.822, 0.80, 0.935))
     return Image.fromarray(out.astype(np.uint8))
 
 
-def sharpen(img: Image.Image, amount: float = 0.55, radius: float = 1.3) -> Image.Image:
+def sharpen(img: Image.Image, amount: float = 1.0, radius: float = 1.6) -> Image.Image:
     a = np.array(img.convert("RGB")).astype(np.float32)
     b = cv2.GaussianBlur(a, (0, 0), radius)
-    return Image.fromarray(np.clip(a + (a - b) * amount, 0, 255).astype(np.uint8))
+    fine = cv2.GaussianBlur(a, (0, 0), 0.7)                      # second, finer pass for small detail
+    return Image.fromarray(np.clip(a + (a - b) * amount + (a - fine) * 0.6, 0, 255).astype(np.uint8))
 
 
 # ------------------------------------------------------------------ gemstone pictures
