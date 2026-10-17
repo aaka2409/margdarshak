@@ -44,9 +44,14 @@
 {%- macro pill(level) -%}<span class="pill pill-{{ level }}">{{ level }}</span>{%- endmacro -%}
 {%- macro medallion(icon) -%}<span class="ic med"><img src="{{ S }}/svg/category_icons/{{ icon }}_icon_medallion.svg" alt=""></span>{%- endmacro -%}
 
+{#- The reference moon sprites: phase 1 (new) .. 12 (full).  best = full, good = gibbous, average = thin crescent. -#}
+{%- macro mi(n, cls="") -%}<img class="mi {{ cls }}" src="{{ S }}/img/moons/phase_{{ '%02d' % n }}.png" alt="">{%- endmacro -%}
+{%- set LV = {"best": 12, "good": 8, "average": 3} -%}
+{%- macro lv(level, cls="") -%}{{ mi(LV[level], cls) }}{%- endmacro -%}
+
 {%- macro legend() -%}
 <div class="legend">
-  <span>{{ art.indicator.best|safe }} Best</span><span>{{ art.indicator.good|safe }} Good</span><span>{{ art.indicator.average|safe }} Average</span>
+  <span>{{ lv("best") }} Best</span><span>{{ lv("good") }} Good</span><span>{{ lv("average") }} Average</span>
 </div>
 {%- endmacro -%}
 <!doctype html>
@@ -60,6 +65,7 @@
 <body>
 {{ art.defs|safe }}
 
+<template id="wm-tpl"><div class="wm">{{ art.watermark|safe }}</div></template>
 <template id="page-shell"><div class="page bg-page">{{ running("") }}{{ footer() }}</div></template>
 
 {# ============================================================ COVER #}
@@ -113,7 +119,7 @@
     {% for ch in chapter_list %}
     <div class="row">
       <div class="n">{{ ch.num }}</div>
-      <div class="m">{{ art.toc_moons[loop.index0]|safe }}</div>
+      <div class="m">{{ mi([loop.index0 + 1, 12]|min) }}</div>
       <div class="t">{{ ch.title }}</div>
       <div class="s">{{ ch.subtitle }}</div>
       <div class="p" data-toc-ref="{{ ch.id }}"></div>
@@ -184,13 +190,16 @@
   <div class="grid">
     <div class="hd"><span></span>{% for m in months %}<span>{{ m.abbr }}</span>{% endfor %}</div>
     {% for r in glance_rows %}
-    <div class="r"><b>{{ r.label }}</b>{% for lvl in r.levels %}<i>{{ art.indicator[lvl]|safe }}</i>{% endfor %}</div>
+    <div class="r"><b>{{ r.label }}</b>{% for lvl in r.levels %}<i>{{ lv(lvl) }}</i>{% endfor %}</div>
     {% endfor %}
   </div>
   {{ legend() }}
   <div class="label2 eyebrow">Jupiter’s movement through your year</div>
-  {{ jupiter.timeline|safe }}
-  <div class="card note-card" style="top:668pt">
+  <div class="jbar">
+    {% for b in jupiter.bar %}<div class="seg" style="left:{{ b.left }}%;width:{{ b.width }}%"><span class="lbl" style="top:{{ b.row * 9 }}pt">{{ b.label }}</span><i></i></div>{% endfor %}
+    <div class="mm">{% for m in months %}<span>{{ m.abbr }}</span>{% endfor %}</div>
+  </div>
+  <div class="card note-card" style="top:558pt">
     <div class="eyebrow">How to read this chapter</div>
     <p>Each month opens with the phase of the year, followed by your status map across the eight areas of life and a detailed forecast for every area. Status labels are exactly as assessed for your chart: Best, Good and Average.</p>
   </div>
@@ -198,12 +207,15 @@
 </div>
 
 {% for m in months %}
-<div class="page month-open with-frame" style="background-image:url('{{ S }}/img/bg_month_{{ m.num }}.jpg')">
-  <div class="running-center">{{ title_en }} {{ year }}</div>
-  {{ page_art("celestial_frames/month_ring_frame_" ~ m.num ~ "_" ~ m.name|lower ~ ".svg", 39.117, 42.1, 131.707) }}
+<div class="page month-open bg-page">
+  {{ running(title_en ~ " " ~ year) }}
+  {{ art.month_dials[loop.index0]|safe }}
+  <img class="bigmoon" src="{{ S }}/img/moons/month_{{ m.num }}.png" alt="">
   <div class="count eyebrow">Month {{ m.num }} of 12</div>
   <div class="name">{{ m.name }}</div>
-  <div class="abs" style="left:40.9mm;top:245.3mm;width:128.2mm">{{ art.month_strips[loop.index0]|safe }}</div>
+  <div class="strip"><i class="ln l"></i><i class="ln r"></i>
+    {% for k in range(1, 13) %}<span class="{% if k == m.index %}cur{% endif %}" style="left:{{ 123.7 + 29.25 * (k - 1) - 99 }}pt">{{ mi(k) }}</span>{% endfor %}
+  </div>
   {{ footer() }}
 </div>
 
@@ -213,26 +225,27 @@
 <div class="page bg-page status">
   {{ running(m.name ~ " · " ~ title_en) }}
   <div class="status-head">
-    <div class="eyebrow">{{ m.name }} {{ year }}</div>
+    <div class="eyebrow">{{ m.name }} · Future lens · {{ year }}</div>
     <h1>Your Status Map</h1>
-    <div class="sign"><span class="eyebrow">Moon sign</span><b>{{ moon|title }}</b></div>
+    <div class="sign"><span class="eyebrow">Moon sign · {{ moon|title }}</span></div>
   </div>
   <div class="card status-sum">
-    <div class="mo">{{ m.name }} {{ year }}</div>
-    <div class="cap">Status across the eight areas of life</div>
+    <div class="mo">{{ m.abbr }}</div>
+    <div class="cap">Month at a glance</div>
+    <div class="moons">{% for a in nb + ng + na %}{{ lv(a.level) }}{% endfor %}</div>
     <div class="cnt"><span><b>{{ nb|length }}</b>Best</span><span><b>{{ ng|length }}</b>Good</span><span><b>{{ na|length }}</b>Average</span></div>
   </div>
   <div class="slide-list">
     {% for a in m.areas %}
     <div class="it">{{ medallion(a.icon) }}<b>{{ a.label }}</b><u>{{ a.level }}</u>
       <div class="trk"><div class="ln"></div><span class="lb a">Average</span><span class="lb g">Good</span><span class="lb b">Best</span>
-        <i class="kn{% if a.level == 'average' %} avg{% endif %}" style="left:{{ {'average': 3, 'good': 50, 'best': 97}[a.level] }}%"></i></div>
+        <span class="kn" style="left:{{ {'average': 1.5, 'good': 50, 'best': 98.5}[a.level] }}%">{{ lv(a.level) }}</span></div>
     </div>
     {% endfor %}
   </div>
   <div class="lean">
-    <div><h4>Where you lead</h4><p>Areas assessed Best for {{ m.name }}</p><div class="l">{% for a in nb %}<span>{{ a.label }}</span>{% else %}<span>—</span>{% endfor %}</div></div>
-    <div><h4>Where to take care</h4><p>Areas assessed Average for {{ m.name }}</p><div class="l">{% for a in na %}<span>{{ a.label }}</span>{% else %}<span>—</span>{% endfor %}</div></div>
+    <div>{{ lv("best", "hd") }}<h4>Lean in</h4><p>Areas running at their strongest this month.</p><div class="l">{% for a in nb %}<span>{{ a.label }}</span>{% else %}<span>—</span>{% endfor %}</div></div>
+    <div class="dark">{{ lv("average", "hd") }}<h4>Move with care</h4><p>Areas that ask for patience and steady effort.</p><div class="l">{% for a in na %}<span>{{ a.label }}</span>{% else %}<span>—</span>{% endfor %}</div></div>
   </div>
   {{ footer() }}
 </div>
@@ -244,8 +257,9 @@
   </template>
   <div class="flow-source">
     {% for a in m.areas %}
-    <div class="area-head" data-keep>{{ medallion(a.icon) }}<b>{{ a.label }}</b>{{ pill(a.level) }}</div>
-    {% for p in a.paras %}<p>{{ p|rich }}</p>{% endfor %}
+    {% set cid = m.num ~ "-" ~ a.key %}
+    <div class="area-head cd-head cd" data-keep data-head data-card="{{ cid }}" data-card-title="{{ a.label }}">{{ medallion(a.icon) }}<b>{{ a.label }}</b>{{ pill(a.level) }}</div>
+    {% for p in a.paras %}<p class="cd{% if loop.last %} cd-end{% endif %}" data-card="{{ cid }}" data-card-title="{{ a.label }}">{{ p|rich }}</p>{% endfor %}
     {% endfor %}
   </div>
 </section>
@@ -280,11 +294,12 @@
   </template>
   <div class="flow-source">
     {% for p in jupiter.periods %}
-    <div class="period-head" data-keep>
+    {% set cid = "jup-" ~ loop.index %}
+    <div class="period-head cd-head cd" data-keep data-head data-card="{{ cid }}" data-card-title="{{ p.house_label }}">
       <span class="pl"><img src="{{ S }}/svg/planets/jupiter_planet_small_row_marker.svg" alt=""></span>
       <span><b>{{ p.house_label }}</b>{% if p.dates %}<span class="d">{{ p.dates }}</span>{% endif %}{% if p.in_label %}<span class="s">{{ p.in_label }}</span>{% endif %}</span>
     </div>
-    {% for t in p.body %}<p>{{ t|rich }}</p>{% endfor %}
+    {% for t in p.body %}<p class="cd{% if loop.last %} cd-end{% endif %}" data-card="{{ cid }}" data-card-title="{{ p.house_label }}">{{ t|rich }}</p>{% endfor %}
     {% endfor %}
     {% for t in jupiter.closing %}<p class="closing{% if loop.first %} sep{% endif %}">{{ t|rich }}</p>{% endfor %}
   </div>
@@ -321,7 +336,7 @@
   </template>
   <div class="flow-source">
     {% for e in pm.months %}
-    <div class="pm-head" data-keep>{{ art.moon_small[e.index - 1]|safe }}<b>{{ e.name }}</b><span>Month {{ e.num }}</span></div>
+    <div class="pm-head" data-keep>{{ mi(e.index, "sm") }}<b>{{ e.name }}</b><span>Month {{ e.num }}</span></div>
     {% for t in e.body %}<p data-nosplit class="pm-p">{{ t|rich }}</p>{% endfor %}
     {% endfor %}
   </div>
@@ -394,12 +409,20 @@
 {# ============================================================ CHAPTER 06 — DO'S AND DON'TS #}
 {{ chapter(chapters.dodont, 7) }}
 
-<div class="page bg-page" data-fit="{{ chapters.dodont.title }}">
+<div class="page bg-page dd-page" data-fit="Do’s">
   {{ running(chapters.dodont.title) }}
-  {{ sec_head(chapters.dodont.num, "Your framework for " ~ year, chapters.dodont.opener, emblem_img("decorative_elements/check_section_emblem.svg")) }}
-  <div class="dd" data-max-bottom="762">
+  {{ sec_head(chapters.dodont.num, "Your framework for " ~ year ~ " · Embrace", [chapters.dodont.opener[0]], "") }}
+  <div class="dd one" data-max-bottom="762">
     <div><div class="eyebrow">Embrace · Do’s</div>
       {% for t in dos %}<div class="it"><img src="{{ S }}/svg/decorative_elements/check_icon.svg" alt="">{{ t }}</div>{% endfor %}</div>
+  </div>
+  {{ footer() }}
+</div>
+
+<div class="page bg-page dd-page" data-fit="Don’ts">
+  {{ running(chapters.dodont.title) }}
+  {{ sec_head(chapters.dodont.num, "Your framework for " ~ year ~ " · Avoid", [chapters.dodont.opener[1]|replace("& ", "")], "") }}
+  <div class="dd one" data-max-bottom="762">
     <div><div class="eyebrow off">Avoid · Don’ts</div>
       {% for t in donts %}<div class="it"><img src="{{ S }}/svg/decorative_elements/cross_icon.svg" alt="">{{ t }}</div>{% endfor %}</div>
   </div>
@@ -449,9 +472,7 @@
 </div>
 
 {# ============================================================ CHAPTER 09 — CLOSING #}
-{{ chapter(chapters.closing, 10) }}
-
-<div class="page bg-page" data-fit="{{ chapters.closing.title }}">
+<div class="page bg-page" data-toc="closing" data-chap="{{ chapters.closing.title }}" data-fit="{{ chapters.closing.title }}">
   {{ running(chapters.closing.title) }}
   <div class="plain-head">
     <div class="eyebrow">A personal note</div>
@@ -476,7 +497,7 @@
   </div>
   <div class="card consult-card">
     <div class="eyebrow">One-to-one astrology · Personal guidance</div>
-    <h2>A private reading with<em>Diva Pratihast</em></h2>
+    <h2>A private reading with<em class="script">Diva Pratihast</em></h2>
     <a class="btn" href="{{ fixed.consultation_url }}">Book consultation now on WhatsApp</a>
     <div class="contact"><a href="{{ fixed.consultation_url }}">{{ contact.whatsapp_label }}</a><a href="https://{{ contact.website }}">{{ contact.website }}</a></div>
   </div>
@@ -488,7 +509,7 @@
   {{ running("About Astro Diva") }}
   <div class="plain-head">
     <div class="eyebrow">About the astrologer</div>
-    <h1>Astro Diva <em>Pratihast</em></h1>
+    <h1>Astro Diva <em class="script">Pratihast</em></h1>
     <span class="hr-short"></span>
   </div>
   <div class="about" data-max-bottom="640">{% for p in back_cover %}<p>{{ p }}</p>{% endfor %}</div>

@@ -337,15 +337,16 @@ def level_of(score: float) -> str:
 
 
 def indicator(level: str, unit: float = 0.56) -> str:
-    """Best = glowing gold disc, Good = half-lit ice disc, Average = hollow ring."""
+    """Best = glowing white moon, Good = half-lit white moon, Average = hollow ring."""
     if level == "best":
-        inner = ('<circle cx="5" cy="5" r="7.92" fill="url(#rGoldGlow)" opacity="0.8"/>'
-                 '<circle cx="5" cy="5" r="3.6" fill="url(#gGold)"/>')
+        inner = ('<circle cx="5" cy="5" r="7.92" fill="url(#rMoonGlow)" opacity="0.9"/>'
+                 '<circle cx="5" cy="5" r="3.6" fill="url(#rMoonLit)"/>'
+                 '<circle cx="5" cy="5" r="3.6" fill="none" stroke="#e8efff" stroke-width="0.25" opacity="0.8"/>')
     elif level == "good":
-        inner = (f'<circle cx="5" cy="5" r="3.02" fill="#0b1020" stroke="{ICE}" stroke-width="0.468"/>'
-                 '<path d="M5,1.98 A3.02,3.02 0 0 1 5,8.02Z" fill="url(#gIce)"/>')
+        inner = ('<circle cx="5" cy="5" r="3.02" fill="#0b1226" stroke="#b7c6e8" stroke-width="0.468"/>'
+                 '<path d="M5,1.98 A3.02,3.02 0 0 1 5,8.02Z" fill="url(#rMoonLit)"/>')
     else:
-        inner = '<circle cx="5" cy="5" r="2.23" fill="none" stroke="#8a8478" stroke-width="0.468"/>'
+        inner = '<circle cx="5" cy="5" r="2.23" fill="none" stroke="#8591b0" stroke-width="0.468"/>'
     size = 16 * unit
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 -3 16 16" width="{n(size)}mm" height="{n(size)}mm" '
             f'class="indicator indicator-{level}" aria-hidden="true">{inner}</svg>')
@@ -495,9 +496,10 @@ def kundali_houses(active: list[int]) -> str:
 
 
 # --------------------------------------------------------------------------- lucky / unlucky visuals
-def _cross(cx, cy, d, w) -> str:
-    """A cross (X) of two lines through (cx, cy), reaching d either way."""
-    return (f'<path d="M{n(cx - d)},{n(cy - d)} L{n(cx + d)},{n(cy + d)} M{n(cx - d)},{n(cy + d)} L{n(cx + d)},{n(cy - d)}" '
+def _cross(cx, cy, d, w, span_x=None) -> str:
+    """A cross (X) of two lines through (cx, cy), reaching d up/down and span_x (default d) sideways."""
+    sx = d if span_x is None else span_x
+    return (f'<path d="M{n(cx - sx)},{n(cy - d)} L{n(cx + sx)},{n(cy + d)} M{n(cx - sx)},{n(cy + d)} L{n(cx + sx)},{n(cy - d)}" '
             f'stroke="#e9e4d6" stroke-width="{w}" stroke-linecap="round" fill="none" opacity="0.92"/>')
 
 
@@ -535,8 +537,8 @@ def swatches(colours: list[str | None], lucky: bool = True) -> str:
                  f'<circle cx="{n(cx)}" cy="20" r="9.2" fill="url(#rShade)" opacity="0.8"/>'
                  f'<circle cx="{n(cx)}" cy="20" r="9.2" fill="none" stroke="{"url(#gGold)" if lucky else "#8a8478"}" stroke-width="0.24"/>')
     if not lucky:
-        for i in range(len(colours)):               # a full cross (X) over every colour to avoid
-            o.append(_cross(x0 + i * step, 20, 6.4, 0.5))
+        half = step * (count - 1) / 2 + 9.2          # one big cross (X) over the whole group of colours to avoid
+        o.append(_cross(30, 20, min(half, 11.5) + 1.2, 0.6, span_x=half + 1.2))
     half = step * (count - 1) / 2 + 12.3
     return wrap((30 - half, 7.5, 2 * half, 25), "".join(o), cls="swatches")
 
@@ -781,3 +783,30 @@ def icon_emblem(kind: str) -> str:
 def moon_emblem(step: int) -> str:
     vb, ring = _static("celestial_frames/section_emblem_ring_empty.svg")
     return wrap(vb, ring + moon(17, 17, 9.2, step, 12), cls="emblem-svg")
+
+
+def month_dial(index: int) -> str:
+    """Dial around the month's big moon (page coordinates in pt, centre 297.6 x 247.6): initials, ticks, star at `index`."""
+    cx, cy, r = 297.6, 247.6, 106.0
+    o = [f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#b9bfdc" stroke-width=".55" opacity=".7"/>',
+         f'<circle cx="{cx}" cy="{cy}" r="{r + 3.6}" fill="none" stroke="#b9bfdc" stroke-width=".4" stroke-dasharray=".5 1.9" opacity=".55"/>']
+    letters = "JFMAMJJASOND"
+    for k in range(12):
+        a = math.radians(k * 30)
+        sx, sy = math.sin(a), -math.cos(a)
+        o.append(f'<line x1="{n(cx + sx * (r - 7))}" y1="{n(cy + sy * (r - 7))}" x2="{n(cx + sx * r)}" y2="{n(cy + sy * r)}" '
+                 f'stroke="#b9bfdc" stroke-width=".45" opacity=".75"/>')
+        b = math.radians(k * 30 + 15)
+        o.append(f'<line x1="{n(cx + math.sin(b) * (r - 3.5))}" y1="{n(cy - math.cos(b) * (r - 3.5))}" '
+                 f'x2="{n(cx + math.sin(b) * r)}" y2="{n(cy - math.cos(b) * r)}" stroke="#b9bfdc" stroke-width=".35" opacity=".5"/>')
+        o.append(f'<text x="{n(cx + sx * (r + 14))}" y="{n(cy + sy * (r + 14))}" text-anchor="middle" dominant-baseline="central" '
+                 f'font-family="Poppins, sans-serif" font-size="5.4" letter-spacing=".1" fill="#aab0cc">{letters[k]}</text>')
+    a = math.radians((index - 1) * 30)
+    sx, sy = cx + math.sin(a) * r, cy - math.cos(a) * r
+    o.append(f'<circle cx="{n(sx)}" cy="{n(sy)}" r="9" fill="url(#rStarGlow)"/>'
+             f'<path d="M{n(sx)},{n(sy - 6)} Q{n(sx)},{n(sy)} {n(sx + 6)},{n(sy)} Q{n(sx)},{n(sy)} {n(sx)},{n(sy + 6)} '
+             f'Q{n(sx)},{n(sy)} {n(sx - 6)},{n(sy)} Q{n(sx)},{n(sy)} {n(sx)},{n(sy - 6)}Z" fill="#fff3cf"/>')
+    defs = ('<defs><radialGradient id="rStarGlow"><stop offset="0" stop-color="#fff3cf" stop-opacity=".85"/>'
+            '<stop offset=".4" stop-color="#f2d594" stop-opacity=".3"/><stop offset="1" stop-color="#f2d594" stop-opacity="0"/>'
+            '</radialGradient></defs>')
+    return f'<svg class="dial" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 594.96 841.92">{defs}{"".join(o)}</svg>'

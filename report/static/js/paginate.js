@@ -111,7 +111,21 @@
 
   /* Try to keep the start of paragraph `p` (already appended to `col`) within `limit` (px from
      the column top).  Returns the remainder element, or null when not even the minimum fits. */
+  const vpad = (el) => { const cs = getComputedStyle(el);
+    return parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth); };
+  /* Card text (class cd): the card's closing edge belongs to the last paragraph only, so a paragraph that is
+     cut loses it from its first half and hands it to the remainder; the box stays open across the break. */
   function splitParagraph(p, col, limit, keep) {
+    const wasEnd = p.classList.contains("cd-end");
+    p.classList.remove("cd-end");
+    p.classList.add("split-head");
+    const rest = splitInner(p, col, limit, keep);
+    if (rest) { if (wasEnd) rest.classList.add("cd-end"); return rest; }
+    p.classList.remove("split-head");
+    if (wasEnd) p.classList.add("cd-end");
+    return null;
+  }
+  function splitInner(p, col, limit, keep) {
     if (p.dataset.nosplit !== undefined || p.tagName !== "P") return null;
     const full = p.innerHTML;
     const tokens = tokenize(full);
@@ -143,7 +157,8 @@
     const probe = restEl();
     p.innerHTML = joinUpTo(tokens, best).head;
     col.appendChild(probe);
-    const restLines = Math.round(probe.getBoundingClientRect().height / lh);
+    probe.classList.remove("split-head");
+    const restLines = Math.round((probe.getBoundingClientRect().height - vpad(probe)) / lh);
     col.removeChild(probe);
     if (restLines < keep) {
       const target = headLines - (keep - restLines);
@@ -167,6 +182,15 @@
      the same page, 2 across a page turn, as in the approved design. */
   function fillColumn(col, queue, limit, keep) {
     const colTop = () => col.getBoundingClientRect().top;
+    const q0 = queue[0];
+    if (q0 && q0.dataset.card !== undefined && q0.dataset.head === undefined && !q0.classList.contains("cd-cont")) {
+      const l = document.createElement("div");           // the card carries on here: say so, inside the card
+      l.className = "cd cd-cont";
+      l.dataset.card = q0.dataset.card;
+      l.dataset.keep = "";
+      l.textContent = (q0.dataset.cardTitle || "") + " · Continued";
+      queue.unshift(l);
+    }
     while (queue.length) {
       const node = queue[0];
       col.appendChild(node);
@@ -323,6 +347,10 @@
       if (p.dataset.chap) chap = p.dataset.chap;
       const t = p.querySelector(".running .txt");
       if (t && chap) t.textContent = chap;
+    });
+    const wm = document.getElementById("wm-tpl");
+    pages.forEach((p) => {                     // Moon-sign watermark behind every text page
+      if (wm && p.classList.contains("bg-page") && !p.classList.contains("cover") && !p.classList.contains("month-open")) p.insertBefore(wm.content.firstElementChild.cloneNode(true), p.firstChild);
     });
     pages.forEach((p, i) => {
       const folio = p.querySelector(".footer .folio");

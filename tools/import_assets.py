@@ -39,6 +39,12 @@ STATIC = Path(__file__).resolve().parent.parent / "report" / "static"
 PAGE = (1654, 2339)                                   # A4 at 200 dpi
 SIGNS = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "capricorn",
          "aquarius", "pisces"]
+# per chapter picture (1-10): flaws painted out.  "blur" = smeared patch, "object" = element removed from the sky.
+FIXES = {
+    7: [("blur", (640, 1030, 920, 1180), {"feather": 50, "sparkle": 150}),
+        ("blur", (0, 1480, 470, 1800), {"feather": 90, "glow": (185, 1655, 60)})],
+    8: [("object", (0, 220, 520, 600), {})],           # the ringed planet
+}
 GEMS = {"blue_sapphire": "blue_sapphire", "cats_eye": "cats_eye", "diamond": "diamond", "emerald": "emerald",
         "orange_gemstone": "hessonite", "hessonite": "hessonite", "pearl": "pearl", "red_coral": "red_coral",
         "ruby": "ruby", "yellow_sapphire": "yellow_sapphire"}
@@ -61,9 +67,7 @@ def _files(folder: Path, *exts: str) -> list[Path]:
 
 
 def _page_jpg(src: Path, dest: Path, prep=None) -> None:
-    im = Image.open(src).convert("RGB")
-    if im.size != PAGE:
-        im = im.resize(PAGE, Image.LANCZOS)
+    im = art_clean.fit_to_page(Image.open(src), PAGE)
     if prep:
         im = prep(im)
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -106,6 +110,8 @@ def main() -> int:
 
             def make(i):
                 def prep(im):
+                    for kind, rect, kw in FIXES.get(i, []):          # retouching of known flaws in the supplied pictures
+                        im = (art_clean.fix_blur_patch if kind == "blur" else art_clean.remove_bright_object)(im, rect, **kw)
                     if not a.keep_titles:
                         im, box = art_clean.erase_title(im)
                         boxes[i] = [int(v) for v in box] if box else None

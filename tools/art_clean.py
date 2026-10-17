@@ -63,20 +63,52 @@ def erase_title(img: Image.Image, pad: int = 34):
 
 
 # ------------------------------------------------------------------ cover: remove the "FOR / NAME / date" placeholder
-def erase_cover_placeholder(img: Image.Image, region=(0.20, 0.835, 0.80, 0.96)) -> Image.Image:
+def fit_to_page(img: Image.Image, size=(1654, 2339)) -> Image.Image:
+    """Fit a picture of another shape to the page without cropping or stretching: scale to the full height and continue
+    the dark sky sideways (mirrored, blurred) - or top/bottom - to fill the page."""
+    W, H = size
+    im = img.convert("RGB")
+    if abs(im.width / im.height - W / H) < 0.004:
+        return im.resize(size, Image.LANCZOS)
+    arr = np.array(im)
+    if im.width / im.height < W / H:                     # too narrow: extend left and right
+        nh = H
+        nw = round(im.width * H / im.height)
+        arr = np.array(im.resize((nw, nh), Image.LANCZOS))
+        pad = (W - nw)
+        l, r = pad // 2, pad - pad // 2
+        ext = cv2.copyMakeBorder(arr, 0, 0, l, r, cv2.BORDER_REFLECT)
+        soft = cv2.GaussianBlur(ext, (0, 0), 22)
+        w = np.zeros((H, W), np.float32)
+        w[:, :l] = 1
+        w[:, W - r:] = 1
+        w = cv2.GaussianBlur(w, (0, 0), 18)[..., None]
+        w[:, l + 24:W - r - 24] = 0
+        ext = (ext * (1 - w) + soft * w).astype(np.uint8)
+        return Image.fromarray(ext)
+    nw = W
+    nh = round(im.height * W / im.width)                 # too wide: extend top and bottom
+    arr = np.array(im.resize((nw, nh), Image.LANCZOS))
+    pad = H - nh
+    t, bt = pad // 2, pad - pad // 2
+    return Image.fromarray(cv2.copyMakeBorder(arr, t, bt, 0, 0, cv2.BORDER_REFLECT))
+
+
+def erase_cover_placeholder(img: Image.Image, region=(0.20, 0.822, 0.80, 0.935)) -> Image.Image:
     """Remove the baked placeholder (FOR, NAME with its stars and rules, date) leaving the painted night sky."""
     rgb = np.array(img.convert("RGB"))
     H, W = rgb.shape[:2]
     x0, y0, x1, y1 = int(region[0] * W), int(region[1] * H), int(region[2] * W), int(region[3] * H)
     gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
-    sub = gray[y0:y1, x0:x1]
-    local = cv2.GaussianBlur(sub, (0, 0), 18)
-    m = (((sub.astype(np.int16) - local.astype(np.int16)) > 10) | (sub > 70)).astype(np.uint8) * 255
-    mask = np.zeros(gray.shape, np.uint8)
-    mask[y0:y1, x0:x1] = m
-    mask = cv2.dilate(mask, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (13, 13)))
+    # thin bright strokes only (letters, rules, sparkles): a white top-hat ignores the large soft shapes of the photo
+    th = cv2.morphologyEx(gray, cv2.MORPH_TOPHAT, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (61, 61)))
+    m = np.zeros(gray.shape, np.uint8)
+    m[y0:y1, x0:x1] = (th[y0:y1, x0:x1] > 26).astype(np.uint8) * 255
+    mask = cv2.dilate(m, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15)))
     out = cv2.inpaint(rgb, mask, 8, cv2.INPAINT_TELEA)
-    return Image.fromarray(out)
+    soft = cv2.GaussianBlur(mask, (0, 0), 3).astype(np.float32)[..., None] / 255
+    out = out * (1 - soft * 0.4) + cv2.GaussianBlur(out, (0, 0), 1.8) * soft * 0.4
+    return Image.fromarray(out.astype(np.uint8))
 
 
 def sharpen(img: Image.Image, amount: float = 0.55, radius: float = 1.3) -> Image.Image:
@@ -109,3 +141,36 @@ def clean_gem(img: Image.Image) -> Image.Image:
     a[..., 3] = np.minimum(alpha, mask)
     out = Image.fromarray(a)
     return out.crop(out.getbbox())
+
+
+# ------------------------------------------------------------------ per-picture retouching
+def remove_bright_object(img: Image.Image, rect, feather: int = 70) -> Image.Image:
+    """Paint out an object (planet, ring ...) lying inside rect = (x0, y0, x1, y1) on a dark, smooth sky."""
+    rgb = np.array(img.convert("RGB"))
+    x0, y0, x1, y1 = rect
+    out = _fill_rect(rgb, x0, y0, x1, y1, feather=feather)
+    return Image.fromarray(out)
+
+
+def fix_blur_patch(img: Image.Image, rect, feather: int = 90, glow=None, sparkle: int = 420) -> Image.Image:
+    """Replace a smeared (out-of-focus) patch by smooth haze continued from its surroundings plus fresh fine sparkles.
+    glow = (x, y, radius) adds a crisp soft light orb (the smear was meant to be a light)."""
+    rgb = np.array(img.convert("RGB"))
+    x0, y0, x1, y1 = rect
+    H, W = rgb.shape[:2]
+    out = _fill_rect(rgb, x0, y0, x1, y1, feather=feather).astype(np.float32)
+    mask = np.zeros((H, W), np.uint8)
+    mask[y0:y1, x0:x1] = 255
+    soft = (cv2.GaussianBlur(mask, (0, 0), feather / 2.5).astype(np.float32) / 255)[..., None]
+    rng = np.random.default_rng(11)
+    layer = np.zeros((H, W), np.float32)
+    for x, y in zip(rng.integers(x0, x1, sparkle), rng.integers(y0, y1, sparkle)):
+        cv2.circle(layer, (int(x), int(y)), int(rng.integers(1, 3)), float(rng.uniform(70, 190)), -1)
+    layer = cv2.GaussianBlur(layer, (0, 0), 0.9)
+    out = out + layer[..., None] * np.array([1.0, 0.83, 0.48]) * soft * 0.9
+    if glow:
+        gx, gy, gr = glow
+        yy, xx = np.mgrid[0:H, 0:W]
+        g = np.clip(1 - np.sqrt((xx - gx) ** 2 + (yy - gy) ** 2) / gr, 0, 1) ** 2.2
+        out = out + g[..., None] * np.array([255, 232, 175]) * 0.8
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))

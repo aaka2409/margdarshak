@@ -183,8 +183,17 @@ def build(person: Person, chart: dict, pack: ContentPack) -> dict:
                 raise ContentError(
                     f"transits/jupiter.json [{asc}]: heading says {p['label']}, but {sign} is the "
                     f"{ordinal(expected)} house from a {asc.title()} ascendant")
+    xs = [svg._year_fraction_x(p["from"]) for p in timeline_periods]
+    xs[0] = 5.0
+    ends = xs[1:] + [161.0]
+    bar, last_end = [], -1.0
+    for a, b, p in zip(xs, ends, timeline_periods):
+        left = round((a - 5) / 156 * 100, 2)
+        row = 1 if left < last_end else 0           # label would run into the previous one: drop it a line
+        last_end = left + len(p["label"]) * 1.05 if row == 0 else last_end
+        bar.append({"left": left, "width": round((b - a) / 156 * 100, 2), "label": p["label"], "row": row})
     ctx["jupiter"] = {"periods": periods, "closing": jup.get("closing", []),
-                      "timeline": svg.timeline(timeline_periods)}
+                      "timeline": svg.timeline(timeline_periods), "bar": bar}
 
     def house_charts(planets: list[str], title: str) -> list[dict]:
         spans = transits_meta[planets[0]]
@@ -287,7 +296,9 @@ def build(person: Person, chart: dict, pack: ContentPack) -> dict:
         "glyph_asc": svg.sign_icon(asc, 6, svg.GOLD_LIGHT),
         "indicator": {lvl: svg.indicator(lvl, 0.7) for lvl in svg.LEVELS},
         "indicator_small": {lvl: svg.indicator(lvl, 0.36) for lvl in svg.LEVELS},
+        "watermark": svg.sign_icon(moon, 60, "#ffffff"),
         "month_strips": [svg.month_strip(i) for i in range(1, 13)],
+        "month_dials": [svg.month_dial(i) for i in range(1, 13)],
         "moon_emblems": [svg.moon_emblem(i) for i in range(1, 13)],
         "moon_small": [svg.wrap((-11, -11, 22, 22), svg.moon(0, 0, 10, i, 12), cls="moon-small") for i in range(1, 13)],
         "toc_moons": [svg.wrap((-11, -11, 22, 22), svg.moon(0, 0, 10, i + 1, 11, glow=0.3 if i == 10 else 0), cls="moon-small")
