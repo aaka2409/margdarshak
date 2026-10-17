@@ -13,6 +13,7 @@ import json
 import sys
 from pathlib import Path
 
+import cv2
 import numpy as np
 from PIL import Image
 
@@ -30,12 +31,26 @@ SPEC = {
 }
 
 
+def match_colour(img: Image.Image, ref_path: Path) -> Image.Image:
+    """Give the original the colour grading of the book's other openers (mean and spread of L, a, b match the reference)."""
+    src = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2LAB).astype(np.float32)
+    ref = cv2.cvtColor(np.array(Image.open(ref_path).convert("RGB")), cv2.COLOR_RGB2LAB).astype(np.float32)
+    for c in range(3):
+        ms, ss = src[..., c].mean(), src[..., c].std() + 1e-6
+        mr, sr = ref[..., c].mean(), ref[..., c].std()
+        src[..., c] = (src[..., c] - ms) * (sr / ss) + mr
+    return Image.fromarray(cv2.cvtColor(np.clip(src, 0, 255).astype(np.uint8), cv2.COLOR_LAB2RGB))
+
+
 def main() -> int:
     titles_path = ROOT / "report" / "data" / "chapter_titles.json"
     titles = json.loads(titles_path.read_text(encoding="utf-8"))
     for n, s in SPEC.items():
         src = ROOT / "art_originals" / f"ch{n:02d}_original.png"
         im = Image.open(src).convert("RGB").crop(s["crop"]).resize(PAGE, Image.LANCZOS)
+        ref = ROOT / "art_originals" / "color_ref" / f"ch{n:02d}.jpg"
+        if ref.exists():
+            im = match_colour(im, ref)
         rgb = np.array(im)
         for _ in range(s.get("passes", 1)):
             for (x0, y0, x1, y1) in s["erase"]:
