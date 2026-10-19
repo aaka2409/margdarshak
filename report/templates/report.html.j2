@@ -213,7 +213,6 @@
   {{ running(title_en ~ " " ~ year) }}
   <div class="count eyebrow">Month {{ m.num }} of 12</div>
   <div class="name">{{ m.name }}</div>
-  <div class="sub"><span class="deva">{{ mv.hindi }}</span><i></i><span>{{ year }}</span></div>
   {{ art.month_ring|safe }}
   <img class="bigmoon" src="{{ S }}/img/moons/month_{{ m.num }}.png" alt="">
   {% for d in mv.discs %}<img class="dm{% if d.flip %} fl{% endif %}{% if d.key %} key{% endif %}" style="left:{{ d.x }}pt;top:{{ d.y }}pt" src="{{ S }}/img/moons/phase_{{ '%02d' % d.sprite }}.png" alt="">{% endfor %}
