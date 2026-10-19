@@ -100,9 +100,9 @@ b { font-weight: 500; }
 /* ------------------------------------------------------------------ section header (first page of a section) */
 .sec-head { position: absolute; left: var(--mx); right: var(--mx); top: 113pt; }
 .sec-head .row { display: block; }
-.sec-head .num { position: absolute; right: 0; top: 14pt; font: 300 35pt/1 var(--sans); color: var(--blue); letter-spacing: .02em; }
+.sec-head .num { display: none; }
 .sec-head .eyebrow { margin: 0; }
-.sec-head h1 { margin: 12pt 0 0; padding-right: 54pt; font: 400 24pt/29pt var(--sans); color: var(--ivory); letter-spacing: 0; }
+.sec-head h1 { margin: 12pt 0 0; padding-right: 0; font: 400 24pt/29pt var(--sans); color: var(--ivory); letter-spacing: 0; }
 .sec-head h1 em { font-style: normal; color: var(--gold-light); }
 .sec-head .hr { display: block; margin-top: 15pt; border-top: .6pt solid var(--line); height: 0; }
 .sec-head .sub { margin-top: 9pt; }

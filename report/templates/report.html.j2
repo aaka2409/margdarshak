@@ -296,7 +296,7 @@
 <section class="flow" data-running="Jupiter’s Transit Impact on You">
   <template class="flow-first">
     {{ sec_head("01", "Planetary transit", ["Jupiter’s Transit", "Impact on You"], emblem_img("planets/jupiter_section_emblem.svg")) }}
-    <div class="pre"><div style="margin:6pt 0 20pt 0">{{ jupiter.timeline|safe }}</div></div>
+    <div class="pre"></div>
   </template>
   <div class="flow-source">
     {% for p in jupiter.periods %}
@@ -315,18 +315,7 @@
 <section class="flow" data-running="{{ t[1] }}’s Transit Impact on You">
   <template class="flow-first">
     {{ sec_head(t[0], "Planetary transit", [t[1] ~ "’s Transit", "Impact on You"], emblem_img(t[3])) }}
-    <div class="pre"><div style="margin:6pt 0 14pt 0">
-      {% for c in t[2].charts %}
-      <div class="houses{% if t[2].charts|length > 1 %} small{% endif %}">
-        {{ c.svg|safe }}
-        <div>
-          <div class="eyebrow">{{ c.title }}</div>
-          <div class="strip">{% for h in range(1, 13) %}<i{% if h in c.active %} class="on"{% endif %}>{{ h }}</i>{% endfor %}</div>
-          <div class="cap">{{ c.caption }}</div>
-        </div>
-      </div>
-      {% endfor %}
-    </div></div>
+    <div class="pre"></div>
   </template>
   <div class="flow-source">
     {% for p in t[2].paras %}<p{% if loop.first %} class="has-dc"{% endif %}>{{ p|rich(dropcap=loop.first) }}</p>{% endfor %}
