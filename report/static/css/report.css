@@ -234,8 +234,8 @@ p.has-dc::after { content: ""; display: block; clear: both; height: 0; }
 .legend span { display: inline-flex; align-items: center; gap: 4pt; }
 .legend .mi { width: 13pt; height: 13pt; }
 .glance .legend { position: absolute; left: 0; right: 0; top: 450pt; }
-.glance .label2 { position: absolute; left: var(--mx); top: 462pt; color: var(--gold); font-size: 4.8pt; }
-.jbar { position: absolute; left: var(--mx); right: var(--mx); top: 480pt; height: 70pt; }
+.glance .label2 { position: absolute; left: var(--mx); top: 476pt; color: var(--gold); font-size: 4.8pt; }
+.jbar { position: absolute; left: var(--mx); right: var(--mx); top: 494pt; height: 70pt; }
 .jbar .seg { position: absolute; top: 0; height: 40pt; }
 .jbar .seg .lbl { position: absolute; left: 0; top: 0; font: 400 5.4pt/1 var(--sans); color: var(--ash); white-space: nowrap; }
 .jbar .seg i { position: absolute; left: 0; right: 0; top: 22pt; height: 14pt; border-radius: 4pt;
@@ -416,7 +416,7 @@ p.closing.sep { border-top: .6pt solid var(--line); margin-top: 14pt; padding-to
 .letter-body p { margin: 0 0 calc(12pt * var(--fit, 1)); }
 .letter-body .thanks { margin-top: calc(18pt * var(--fit, 1)); font-style: italic; color: var(--gold-light); }
 .letter-body .signoff { margin: calc(12pt * var(--fit, 1)) 0 0; font: italic 300 10pt/1 var(--sans); color: var(--ash); text-align: left; }
-.letter-body .sig { margin: 8pt 0 0; font: 400 30pt/1.1 var(--script); color: var(--gold-light); text-align: left; }
+.letter-body .sig { margin: 8pt 0 0; font: 400 30pt/1.1 var(--script); color: var(--gold-light); text-align: left; word-spacing: .16em; }
 
 .consult-body { position: absolute; left: var(--mx); right: var(--mx); top: 196pt; font-size: calc(10.2pt * var(--fit, 1)); line-height: calc(16.4pt * var(--fit, 1)); }
 .consult-body p { margin: 0 0 calc(12pt * var(--fit, 1)); }
@@ -438,7 +438,7 @@ p.closing.sep { border-top: .6pt solid var(--line); margin-top: 14pt; padding-to
 .back .tail2 .tag { font: italic 300 10.4pt/1 var(--sans); color: var(--gold-light); }
 .back .tail2 .caps { margin-top: 14pt; font-size: 4.8pt; color: var(--muted); }
 
-.script { font-family: var(--script); font-style: normal; font-weight: 400; letter-spacing: .01em; }
+.script { font-family: var(--script); font-style: normal; font-weight: 400; letter-spacing: .01em; word-spacing: .16em; }
 .consult-card h2 em.script { font-family: var(--script); font-size: 34pt; line-height: 1.2; font-weight: 400; color: var(--gold-light); }
 .plain-head h1 em.script { font-size: 34pt; font-weight: 400; }
 
@@ -466,4 +466,4 @@ p.closing.sep { border-top: .6pt solid var(--line); margin-top: 14pt; padding-to
 .pill { text-indent: 0; }
 
 .serif-body .sig-r { margin: 6pt 0 0; text-align: right; }
-.serif-body .sig-r em { font: 400 30pt/1.1 var(--script); font-style: normal; color: var(--gold-light); }
+.serif-body .sig-r em { font: 400 30pt/1.1 var(--script); font-style: normal; color: var(--gold-light); word-spacing: .16em; }

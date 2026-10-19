@@ -582,6 +582,7 @@ def week_ring(day: str, planet: str, lucky: bool = True) -> str:
         elif d == day:
             o.append(f'<circle cx="{n(cx)}" cy="{n(cy)}" r="3.5" fill="#05060c" stroke="{ASH}" stroke-width="0.24"/>')
             o.append(text(cx, cy + 0.95, label, 2.7, SERIF, "#d6d1c4", "middle", 500))
+            o.append(_cross(cx, cy, 2.6, 0.26))
         else:
             o.append(f'<circle cx="{n(cx)}" cy="{n(cy)}" r="2.6" fill="{NIGHT}" stroke="{GOLD}" stroke-width="0.1" opacity="0.8"/>')
             o.append(text(cx, cy + 0.7, label, 2.0, SERIF, GOLD, "middle", 500, opacity=0.6))
