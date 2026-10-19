@@ -786,28 +786,15 @@ def moon_emblem(step: int) -> str:
     return wrap(vb, ring + moon(17, 17, 9.2, step, 12), cls="emblem-svg")
 
 
-def month_dial(index: int) -> str:
-    """Dial around the month's big moon (page coordinates in pt, centre 297.6 x 247.6): initials, ticks, star at `index`."""
-    cx, cy, r = 297.6, 247.6, 106.0
-    o = [f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#b9bfdc" stroke-width=".55" opacity=".7"/>',
-         f'<circle cx="{cx}" cy="{cy}" r="{r + 3.6}" fill="none" stroke="#b9bfdc" stroke-width=".4" stroke-dasharray=".5 1.9" opacity=".55"/>']
-    letters = "JFMAMJJASOND"
-    for k in range(12):
-        a = math.radians(k * 30)
-        sx, sy = math.sin(a), -math.cos(a)
-        o.append(f'<line x1="{n(cx + sx * (r - 7))}" y1="{n(cy + sy * (r - 7))}" x2="{n(cx + sx * r)}" y2="{n(cy + sy * r)}" '
-                 f'stroke="#b9bfdc" stroke-width=".45" opacity=".75"/>')
-        b = math.radians(k * 30 + 15)
-        o.append(f'<line x1="{n(cx + math.sin(b) * (r - 3.5))}" y1="{n(cy - math.cos(b) * (r - 3.5))}" '
-                 f'x2="{n(cx + math.sin(b) * r)}" y2="{n(cy - math.cos(b) * r)}" stroke="#b9bfdc" stroke-width=".35" opacity=".5"/>')
-        o.append(f'<text x="{n(cx + sx * (r + 14))}" y="{n(cy + sy * (r + 14))}" text-anchor="middle" dominant-baseline="central" '
-                 f'font-family="Poppins, sans-serif" font-size="5.4" letter-spacing=".1" fill="#aab0cc">{letters[k]}</text>')
-    a = math.radians((index - 1) * 30)
-    sx, sy = cx + math.sin(a) * r, cy - math.cos(a) * r
-    o.append(f'<circle cx="{n(sx)}" cy="{n(sy)}" r="9" fill="url(#rStarGlow)"/>'
-             f'<path d="M{n(sx)},{n(sy - 6)} Q{n(sx)},{n(sy)} {n(sx + 6)},{n(sy)} Q{n(sx)},{n(sy)} {n(sx)},{n(sy + 6)} '
-             f'Q{n(sx)},{n(sy)} {n(sx - 6)},{n(sy)} Q{n(sx)},{n(sy)} {n(sx)},{n(sy - 6)}Z" fill="#fff3cf"/>')
-    defs = ('<defs><radialGradient id="rStarGlow"><stop offset="0" stop-color="#fff3cf" stop-opacity=".85"/>'
-            '<stop offset=".4" stop-color="#f2d594" stop-opacity=".3"/><stop offset="1" stop-color="#f2d594" stop-opacity="0"/>'
-            '</radialGradient></defs>')
-    return f'<svg class="dial" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 594.96 841.92">{defs}{"".join(o)}</svg>'
+def month_ring(cx: float = 297.6, cy: float = 399.0) -> str:
+    """Hairline rings and ticks around the month's moon calendar (page coordinates in pt).  The small daily moons sit on
+    the radius-158 circle and are placed by the template; the big moon fills the inner circle."""
+    o = [f'<circle cx="{cx}" cy="{cy}" r="175" fill="none" stroke="#cfae6e" stroke-width=".7" opacity=".85"/>',
+         f'<circle cx="{cx}" cy="{cy}" r="167" fill="none" stroke="#b9bfdc" stroke-width=".3" opacity=".35"/>',
+         f'<circle cx="{cx}" cy="{cy}" r="150" fill="none" stroke="#b9bfdc" stroke-width=".45" opacity=".5"/>']
+    for k in range(60):
+        a = math.radians(k * 6)
+        r0, r1 = (136, 146) if k % 5 == 0 else (140, 146)
+        o.append(f'<line x1="{n(cx + math.sin(a) * r0)}" y1="{n(cy - math.cos(a) * r0)}" x2="{n(cx + math.sin(a) * r1)}" '
+                 f'y2="{n(cy - math.cos(a) * r1)}" stroke="#b9bfdc" stroke-width=".4" opacity="{.7 if k % 5 == 0 else .4}"/>')
+    return f'<svg class="dial" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 594.96 841.92">{"".join(o)}</svg>'

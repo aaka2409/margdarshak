@@ -186,14 +186,33 @@ p.has-dc::after { content: ""; display: block; clear: both; height: 0; }
 .chapter .ct .rule i { flex: 1; border-top: .5pt solid rgba(207,174,110,.65); }
 .chapter .ct .rule b { width: 4pt; height: 4pt; background: var(--gold); transform: rotate(45deg); }
 .month-open .dial { position: absolute; left: 0; top: 0; width: 594.96pt; height: 841.92pt; }
-.month-open .bigmoon { position: absolute; left: 178.25pt; top: 128pt; width: 239pt; height: 239pt; }
-.month-open .count { position: absolute; left: 0; right: 0; padding-left: .32em; top: 571pt; text-align: center; color: var(--gold); font-size: 6.4pt; letter-spacing: .32em; }
-.month-open .name { position: absolute; left: 0; right: 0; top: 626pt; text-align: center; font: italic 300 38pt/1.2 var(--sans); color: var(--ivory); }
-.month-open .strip { position: absolute; left: 99pt; top: 692pt; width: 396pt; height: 24pt; }
+.month-open .bigmoon { position: absolute; left: 122pt; top: 223.5pt; width: 351pt; height: 351pt; }
+.month-open .count { position: absolute; left: 0; right: 0; padding-left: .32em; top: 104pt; text-align: center; color: var(--gold); font-size: 7pt; letter-spacing: .32em; }
+.month-open .name { position: absolute; left: 0; right: 0; top: 114pt; text-align: center; font: italic 600 66pt/70pt var(--disp); color: var(--ivory); }
+.month-open .sub { position: absolute; left: 0; right: 0; top: 186pt; display: flex; justify-content: center; align-items: center; gap: 7pt; color: var(--muted); font: 400 7.4pt/1 var(--sans); letter-spacing: .26em; }
+.month-open .sub .deva { font: 500 11pt/1 var(--deva); letter-spacing: 0; color: var(--gold-light); }
+.month-open .sub i { width: 3pt; height: 3pt; background: var(--gold); transform: rotate(45deg); }
+.month-open .dm { position: absolute; width: 12.6pt; height: 12.6pt; }
+.month-open .dm.fl { transform: scaleX(-1); }
+.month-open .dm.key { border-radius: 50%; box-shadow: 0 0 0 1pt #0a0e1e, 0 0 0 1.9pt var(--gold); }
+.month-open .pcards { position: absolute; left: 83pt; top: 609pt; width: 429pt; display: flex; gap: 7pt; }
+.month-open .pcard { flex: 1; height: 75pt; box-sizing: border-box; border: .6pt solid rgba(207,174,110,.4); border-radius: 12pt;
+  background: rgba(20,22,32,.72); text-align: center; padding-top: 9pt; }
+.month-open .pc { display: block; width: 18pt; height: 18pt; margin: 0 auto 5pt; border-radius: 50%; }
+.month-open .pc-new { background: #16224e; box-shadow: 0 0 0 .5pt rgba(207,217,240,.35); }
+.month-open .pc-first { background: linear-gradient(90deg, #16224e 50%, #eef2ff 50%); }
+.month-open .pc-full { background: #eef2ff; }
+.month-open .pc-last { background: linear-gradient(90deg, #eef2ff 50%, #16224e 50%); }
+.month-open .pcard .lb { font: 500 5.8pt/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+.month-open .pcard .dt { font: italic 600 18pt/21pt var(--disp); color: var(--ivory); margin-top: 2pt; }
+.month-open .pcard .dt.none { color: var(--muted); }
+.month-open .pcard .tm { font: 400 6.6pt/1 var(--sans); letter-spacing: .06em; color: var(--muted); }
+.month-open .strip { position: absolute; left: 99pt; top: 716pt; width: 396pt; height: 24pt; }
 .month-open .strip .ln { position: absolute; top: 12pt; height: 0; border-top: .6pt solid rgba(207,174,110,.8); }
 .month-open .strip .ln.l { left: 0; width: 19pt; } .month-open .strip .ln.r { right: 0; width: 19pt; }
 .month-open .strip span { position: absolute; top: 0; width: 24pt; height: 24pt; border-radius: 50%; }
-.month-open .strip span img { width: 24pt; height: 24pt; display: block; }
+.month-open .strip span img { width: 24pt; height: 24pt; display: block; transform: scale(.58); opacity: .85; }
+.month-open .strip span.cur img { transform: none; opacity: 1; }
 .month-open .strip span.cur { box-shadow: 0 0 0 1.6pt rgba(10,14,30,1), 0 0 0 2.4pt var(--gold); }
 .mi { display: block; width: 100%; height: 100%; object-fit: contain; }
 
@@ -229,10 +248,10 @@ p.has-dc::after { content: ""; display: block; clear: both; height: 0; }
 .grid .r i { display: flex; justify-content: center; }
 .grid .r i .mi { width: 16.4pt; height: 16.4pt; }
 .grid .r { height: 27.6pt; }
-.legend { display: flex; justify-content: center; align-items: center; gap: 26pt; font: 400 5pt/1 var(--sans);
+.legend { display: flex; justify-content: center; align-items: center; gap: 52pt; padding-left: var(--track); font: 400 5.8pt/1 var(--sans);
           letter-spacing: var(--track); text-transform: uppercase; color: var(--muted); }
-.legend span { display: inline-flex; align-items: center; gap: 4pt; }
-.legend .mi { width: 13pt; height: 13pt; }
+.legend span { display: inline-flex; align-items: center; gap: 7pt; }
+.legend .mi { width: 16pt; height: 16pt; }
 .glance .legend { position: absolute; left: 0; right: 0; top: 450pt; }
 .glance .label2 { position: absolute; left: var(--mx); top: 488pt; color: var(--gold); font-size: 4.8pt; }
 .jbar { position: absolute; left: var(--mx); right: var(--mx); top: 506pt; height: 70pt; }

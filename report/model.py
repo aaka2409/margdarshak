@@ -18,7 +18,7 @@ import re
 from pathlib import Path
 from dataclasses import dataclass, field
 
-from . import svg
+from . import lunar, svg
 from .astro import (AREAS, MONTHS, WEEKDAY_PLANET, AstroError, activated_houses, house_of, mulank, norm_sign,
                     ordinal, parse_dob)
 from .content import ContentError, ContentPack
@@ -144,6 +144,10 @@ def build(person: Person, chart: dict, pack: ContentPack) -> dict:
         months.append({"name": name.title(), "abbr": name[:3].title(), "num": f"{i + 1:02d}", "index": i + 1,
                        "areas": areas, "radar": svg.radar(name[:3].title(), areas)})
     ctx["months"] = months
+    try:                       # the sky is the same for everyone: phase dates and times for each month's opener
+        ctx["moon_months"] = [lunar.month_view(year, i) for i in range(1, 13)]
+    except lunar.MoonDataError as exc:
+        raise ContentError(str(exc)) from exc
     ctx["glance_rows"] = [{"label": a["label"], "levels": [m["areas"][j]["level"] for m in months]}
                           for j, a in enumerate(AREAS)]
 
@@ -298,7 +302,7 @@ def build(person: Person, chart: dict, pack: ContentPack) -> dict:
         "indicator_small": {lvl: svg.indicator(lvl, 0.36) for lvl in svg.LEVELS},
         "watermark": svg.sign_icon(moon, 60, "#ffffff"),
         "month_strips": [svg.month_strip(i) for i in range(1, 13)],
-        "month_dials": [svg.month_dial(i) for i in range(1, 13)],
+        "month_ring": svg.month_ring(),
         "moon_emblems": [svg.moon_emblem(i) for i in range(1, 13)],
         "moon_small": [svg.wrap((-11, -11, 22, 22), svg.moon(0, 0, 10, i, 12), cls="moon-small") for i in range(1, 13)],
         "toc_moons": [svg.wrap((-11, -11, 22, 22), svg.moon(0, 0, 10, i + 1, 11, glow=0.3 if i == 10 else 0), cls="moon-small")

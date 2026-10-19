@@ -209,11 +209,17 @@
 
 {% for m in months %}
 <div class="page month-open bg-page">
+  {%- set mv = moon_months[loop.index0] %}
   {{ running(title_en ~ " " ~ year) }}
-  {{ art.month_dials[loop.index0]|safe }}
-  <img class="bigmoon" src="{{ S }}/img/moons/month_{{ m.num }}.png" alt="">
   <div class="count eyebrow">Month {{ m.num }} of 12</div>
   <div class="name">{{ m.name }}</div>
+  <div class="sub"><span class="deva">{{ mv.hindi }}</span><i></i><span>{{ year }}</span></div>
+  {{ art.month_ring|safe }}
+  <img class="bigmoon" src="{{ S }}/img/moons/month_{{ m.num }}.png" alt="">
+  {% for d in mv.discs %}<img class="dm{% if d.flip %} fl{% endif %}{% if d.key %} key{% endif %}" style="left:{{ d.x }}pt;top:{{ d.y }}pt" src="{{ S }}/img/moons/phase_{{ '%02d' % d.sprite }}.png" alt="">{% endfor %}
+  <div class="pcards">
+    {% for c in mv.cards %}<div class="pcard"><span class="pc pc-{{ c.phase }}"></span><div class="lb">{{ c.label }}</div>{% if c.date %}<div class="dt">{{ c.date }}</div><div class="tm">{{ c.time }}</div>{% else %}<div class="dt none">&mdash;</div><div class="tm">none this month</div>{% endif %}</div>{% endfor %}
+  </div>
   <div class="strip"><i class="ln l"></i><i class="ln r"></i>
     {% for k in range(1, 13) %}<span class="{% if k == m.index %}cur{% endif %}" style="left:{{ 123.7 + 29.25 * (k - 1) - 99 }}pt">{{ mi(k) }}</span>{% endfor %}
   </div>
