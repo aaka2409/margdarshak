@@ -67,7 +67,8 @@ def process(conn, job: dict, *, render, send, keep_pdf: bool = False, out_dir: P
             jq.set_pdf(conn, jid, str(pdf), pages)
         if not keep_pdf:
             send(payload, year, pdf)
-            pdf.unlink(missing_ok=True)                        # delivered: keep no copy of the customer's report
+            pdf.unlink(missing_ok=True)                        # delivered: the download link keeps its own copy
+            pdf.with_suffix(".jpg").unlink(missing_ok=True)
         jq.complete(conn, jid)
         db.finish_job(db_id, 1)
         db.mark_order(payload.get("user_id"), 1)
@@ -77,6 +78,7 @@ def process(conn, job: dict, *, render, send, keep_pdf: bool = False, out_dir: P
         status = jq.fail(conn, jid, f"{type(exc).__name__}: {exc}", retry=retry)
         if status == jq.FAILED:
             pdf.unlink(missing_ok=True)
+            pdf.with_suffix(".jpg").unlink(missing_ok=True)
             db.finish_job(db_id, -1)
             log.error("job %s FAILED for good: %s", jid, exc)
         else:

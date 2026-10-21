@@ -1,31 +1,95 @@
-<html>
-  <body style="font-family: Arial, sans-serif; line-height: 1.6; font-size: 15px; color: #333;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Your Margdarshak {{ year }} Report</title>
+</head>
+<body style="margin:0;padding:0;background:#f6ece3;">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">Your Margdarshak {{ year }} report is ready. Tap Download Now to open it.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f6ece3;">
+<tr><td align="center" style="padding:24px 12px;">
 
-    <p>Hello {{ full_name }},</p>
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#fffaf6;border-radius:24px;overflow:hidden;">
 
-    <p>Thank you for choosing <b>Diva Pratihast</b> for your astrology &amp; numerology insights.
-    Your <b>{{ year }} Horoscope Prediction Report</b> has been carefully prepared and is attached to this email.</p>
+    <!-- header -->
+    <tr><td align="center" style="background:#4f0a1c;padding:21px 20px 20px;border-radius:24px 24px 0 0;">
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:15px;letter-spacing:4px;color:#e6b866;text-transform:uppercase;">Astro Diva Pratihast</div>
+      <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:2px;color:#ecd2c3;text-transform:uppercase;margin-top:9px;">&#10022;&nbsp; Ancient Wisdom. Modern Guidance. &nbsp;&#10022;</div>
+    </td></tr>
 
-    <p><b>Your report includes:</b></p>
-    <ul>
-      <li>Personalised numerology guidance</li>
-      <li>Monthly predictions for {{ year }}</li>
-      <li>Strengths, challenges &amp; opportunities</li>
-      <li>Recommendations for better alignment</li>
-    </ul>
+    <!-- title -->
+    <tr><td align="center" style="padding:40px 24px 0;">
+      <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;letter-spacing:3px;color:#b07d3a;text-transform:uppercase;">{{ full_name }}</div>
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:34px;line-height:42px;font-weight:bold;color:#4f0a1c;margin-top:18px;">Your Margdarshak<br>{{ year }} Report</div>
+      <div style="width:60px;height:3px;background:#c99a57;margin:22px auto 0;font-size:0;line-height:0;">&nbsp;</div>
+    </td></tr>
 
-    <p>Please read it with focus for maximum benefit.</p>
+    <!-- cover + button -->
+    <tr><td style="padding:32px 28px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fbe8dc;border-radius:16px;">
+        <tr><td align="center" style="padding:26px 16px 0;">
+          {% if has_cover %}<a href="{{ download_url }}" style="text-decoration:none;"><img src="cid:cover" width="280" alt="Your Margdarshak {{ year }} cover" style="display:block;width:280px;max-width:100%;height:auto;border:0;border-radius:6px;"></a>{% endif %}
+        </td></tr>
+        <tr><td align="center" style="padding:{% if has_cover %}26px{% else %}34px{% endif %} 16px 34px;">
+          <a href="{{ download_url }}" style="display:inline-block;background:#4f0a1c;color:#ffffff;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;padding:16px 38px;border-radius:999px;border:1px solid #c99a57;">Download Now</a>
+        </td></tr>
+      </table>
+    </td></tr>
 
-    <p>With positive energy,<br>
-    <b>Team Diva Pratihast</b></p>
+    <!-- thanks -->
+    <tr><td align="center" style="padding:30px 32px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:24px;color:#5a4a46;">
+      Thank you for choosing Astro Diva Pratihast.<br>
+      Your Margdarshak {{ year }} is ready. Download it and see what the year holds.
+    </td></tr>
 
-    <hr style="border: none; border-top: 1px solid #ccc; margin: 20px 0;">
+    <!-- includes -->
+    <tr><td align="center" style="padding:32px 28px 0;">
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:23px;font-weight:bold;color:#4f0a1c;">Your Report Includes</div>
+    </td></tr>
+    <tr><td style="padding:16px 22px 0;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        {% for pair in [[("Your Cosmic Profile", "Moon sign, ascendant and nakshatra"), ("Month-by-Month Roadmap", "Every month rated across eight life areas")], [("Planetary Transit Impact", "What " ~ year ~ "&#8217;s movements mean for you"), ("Remedies &amp; Lucky Dates", "Plus colours, gemstones and rituals")]] %}
+        <tr>
+          {% for card in pair %}
+          <td width="50%" valign="top" style="padding:6px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border:1px solid #f0dccd;border-radius:14px;">
+              <tr><td align="center" style="padding:18px 10px 18px;font-family:Arial,Helvetica,sans-serif;">
+                <div style="font-size:16px;color:#c99a57;line-height:16px;">&#10022;</div>
+                <div style="font-size:14px;font-weight:bold;color:#4f0a1c;margin-top:12px;line-height:19px;">{{ card[0]|safe }}</div>
+                <div style="font-size:12px;color:#8a6a5d;margin-top:7px;line-height:18px;">{{ card[1]|safe }}</div>
+              </td></tr>
+            </table>
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+    </td></tr>
 
-    <p style="font-size: 12px; color: #777;">
-      Need assistance? Contact us at
-      <a href="mailto:support@divapratihast.com" style="color: #007BFF; font-weight: bold;">support@divapratihast.com</a>
-      or
-      <a href="tel:+919311620907" style="color: #007BFF; font-weight: bold;">+91 9311620907</a>
-    </p>
-  </body>
+    <!-- sign-off -->
+    <tr><td align="center" style="padding:30px 28px 34px;font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:26px;color:#3b2a2a;">
+      <i>Read it with focus and <b style="color:#2f7d32;">positive energy,</b></i><br>
+      <b style="color:#4f0a1c;">Team Astro Diva Pratihast</b>
+    </td></tr>
+
+    <!-- footer -->
+    <tr><td align="center" style="background:#4f0a1c;padding:26px 20px 28px;border-radius:0 0 24px 24px;font-family:Arial,Helvetica,sans-serif;">
+      <div style="font-size:13px;font-weight:bold;letter-spacing:1.5px;color:#e6b866;text-transform:uppercase;">Need assistance?</div>
+      <div style="font-size:14px;margin-top:12px;"><a href="mailto:support@divapratihast.com" style="color:#ffffff;text-decoration:none;">support@divapratihast.com</a></div>
+      <div style="font-size:14px;margin-top:8px;"><a href="tel:+919311620907" style="color:#ffffff;text-decoration:none;">+91 9311620907</a></div>
+    </td></tr>
+
+  </table>
+
+  <div style="max-width:600px;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:17px;color:#9c857b;padding:14px 10px 0;text-align:center;">
+    Button not working? Copy this link into your browser:<br>
+    <a href="{{ download_url }}" style="color:#9c857b;word-break:break-all;">{{ download_url }}</a><br>
+    This private link is for you only and stays active for {{ days }} days.
+  </div>
+
+</td></tr>
+</table>
+</body>
 </html>

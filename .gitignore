@@ -11,3 +11,7 @@ local_test_queue.db*
 *.bak2
 out/
 generated_reports/
+
+downloads/
+
+.venv/

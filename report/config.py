@@ -30,7 +30,9 @@ DB_ORDERS_TABLE = _get("DB_ORDERS_TABLE", "checkout_orders")
 SMTP = {"host": _get("SMTP_HOST", "smtp.gmail.com"), "port": int(_get("SMTP_PORT", "465") or 465),
         "username": _get("SMTP_USERNAME"), "password": _get("SMTP_PASSWORD").replace(" ", ""),
         "from_address": _get("SMTP_FROM") or _get("SMTP_USERNAME")}
-MAX_ATTACHMENT_MB = float(_get("MAX_ATTACHMENT_MB", "18"))        # Gmail refuses ~25 MB after encoding
+DOWNLOAD_DIR = Path(_get("DOWNLOAD_DIR", "downloads"))             # delivered PDFs wait here for the e-mail button
+DOWNLOAD_DAYS = int(_get("DOWNLOAD_DAYS", "60") or 60)             # the link stops working after this many days
+PUBLIC_BASE_URL = _get("PUBLIC_BASE_URL", "http://localhost:8080").rstrip("/")   # where customers reach this API
 ALLOW_SAMPLE_CONTENT = _get("ALLOW_SAMPLE_CONTENT") == "1"                # testing only
 API_TOKEN = _get("API_TOKEN")                                      # if set, callers must send X-Api-Token
 

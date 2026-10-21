@@ -78,7 +78,7 @@ def _shrink(pdf: Path) -> None:
 
 
 def html_to_pdf(html: str, output: Path | str, keep_html: Path | str | None = None, timeout_ms: int = 180_000,
-                strict: bool = True) -> dict:
+                strict: bool = True, cover: Path | str | None = None) -> dict:
     """Print `html` to `output`.  Returns {"pages": n}.  Raises RenderError on any layout problem."""
     from playwright.sync_api import sync_playwright
 
@@ -105,6 +105,11 @@ def html_to_pdf(html: str, output: Path | str, keep_html: Path | str | None = No
                 problems = list(dict.fromkeys(errors + list(result.get("problems", []))))
                 if problems and strict:
                     raise RenderError(problems)
+                if cover:                                   # page 1 as a picture, for the e-mail
+                    try:
+                        page.locator(".page").first.screenshot(path=str(cover), type="jpeg", quality=86)
+                    except Exception:                       # noqa: BLE001 - the e-mail simply goes without the picture
+                        Path(cover).unlink(missing_ok=True)
                 page.emulate_media(media="print")
                 page.pdf(path=str(tmp_pdf), width="210mm", height="297mm", print_background=True,
                          margin={"top": "0", "right": "0", "bottom": "0", "left": "0"}, prefer_css_page_size=True)
