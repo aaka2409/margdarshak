@@ -10,20 +10,17 @@ POST /generate-2027-report   (also /generate-<year>-report)
     ?email=0 -> old behaviour for testing: build the PDF in this request and return it (slow, 2 at a time).
 GET  /jobs/<id>              status: queued / running / done / failed
 GET  /queue                  counts per status
-GET  /d/<token>[/<name>]     the e-mail button: downloads the PDF (public, the random token is the key)
 If API_TOKEN is set, callers must send it in the X-Api-Token header.
 
 """
 from __future__ import annotations
 
 import hmac
-import json
 import logging
 import os
 import re
 import tempfile
 import threading
-import time
 from pathlib import Path
 
 from flask import Flask, jsonify, request, send_file
@@ -184,45 +181,8 @@ def generate_report(year: int):
     db.mark_order(data.get("user_id"), 1)
     if not send_mail:
         return send_file(pdf, mimetype="application/pdf", as_attachment=True, download_name=pdf.name)
-    pdf.unlink(missing_ok=True)                                 # delivered by e-mail; the copy for the download link is kept separately
-    pdf.with_suffix(".jpg").unlink(missing_ok=True)
+    pdf.unlink(missing_ok=True)                                 # delivered by e-mail; keep no copy of the customer's report
     return jsonify(status="success", message=f"{year} report generated and e-mailed.", pages=result["pages"])
-
-
-_TOKEN = re.compile(r"[A-Za-z0-9_-]{20,64}")
-
-
-@app.get("/d/<token>")
-@app.get("/d/<token>/<name>")
-def download(token: str, name: str = ""):
-    """The e-mail button.  The random token is the key; the name in the URL is only for show."""
-    pdf, meta = config.DOWNLOAD_DIR / f"{token}.pdf", config.DOWNLOAD_DIR / f"{token}.json"
-    if not _TOKEN.fullmatch(token) or not pdf.is_file() or not meta.is_file():
-        return "This download link is not valid.", 404
-    try:
-        info = json.loads(meta.read_text())
-    except ValueError:
-        return "This download link is not valid.", 404
-    if info.get("expires", 0) < time.time():
-        return "This download link has expired. Please contact support@divapratihast.com.", 410
-    resp = send_file(pdf, mimetype="application/pdf", as_attachment=True, download_name=info.get("filename") or "Margdarshak.pdf")
-    resp.headers["Cache-Control"] = "private, no-store"
-    resp.headers["X-Robots-Tag"] = "noindex, nofollow"
-    return resp
-
-
-def _purge_loop() -> None:
-    while True:
-        try:
-            n = mailer.purge_expired()
-            if n:
-                log.info("removed %s expired download(s)", n)
-        except Exception:                                       # noqa: BLE001
-            log.exception("download clean-up failed")
-        time.sleep(3600)
-
-
-threading.Thread(target=_purge_loop, daemon=True, name="download-purge").start()
 
 
 if __name__ == "__main__":
