@@ -36,6 +36,5 @@ def generate(request: dict, year: int, output: Path | str, *, chart_provider=Non
     if pack.meta.get("sample") and not allow_sample:
         raise ContentError(f"content/{year} is still the SAMPLE text (2026 wording). Replace it with the real {year} text and remove \"sample\" from year.json, or set ALLOW_SAMPLE_CONTENT=1 to test")
     ctx = build(person, chart, pack)
-    result = html_to_pdf(render_html(ctx), output, keep_html=keep_html, strict=strict,
-                         cover=Path(output).with_suffix(".jpg"))
+    result = html_to_pdf(render_html(ctx), output, keep_html=keep_html, strict=strict)
     return {**result, "moon_sign": ctx["moon"], "ascendant": ctx["asc"], "mulank": ctx["mulank"], "output": str(output), "sample": bool(pack.meta.get("sample"))}

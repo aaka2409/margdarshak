@@ -30,10 +30,10 @@ def _safe(name: str) -> str:
     return re.sub(r"_+", "_", keep).strip("_") or "User"
 
 
-def render_body(full_name: str, year: int, download_url: str = "#", has_cover: bool = False) -> str:
+def render_body(full_name: str, year: int, download_url: str = "#") -> str:
     env = Environment(loader=FileSystemLoader(TEMPLATES), autoescape=select_autoescape(["html"]))
-    return env.get_template("report_email.html").render(full_name=(full_name or "").strip().upper(), year=year, download_url=download_url,
-                                                        has_cover=has_cover, days=config.DOWNLOAD_DAYS)
+    return env.get_template("report_email.html").render(full_name=(full_name or "").strip(), year=year, download_url=download_url,
+                                                        days=config.DOWNLOAD_DAYS)
 
 
 def publish(pdf_path: Path | str, full_name: str, year: int) -> str:
@@ -70,7 +70,6 @@ def send_report(to_email: str, full_name: str, year: int, pdf_path: Path | str) 
     if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", to_email or ""):
         raise MailError(f"'{to_email}' is not a valid e-mail address")
     pdf_path = Path(pdf_path)
-    cover = pdf_path.with_suffix(".jpg")
     url = publish(pdf_path, full_name, year)
 
     msg = EmailMessage()
@@ -80,9 +79,7 @@ def send_report(to_email: str, full_name: str, year: int, pdf_path: Path | str) 
     msg.set_content(f"Hello {full_name},\n\nYour Margdarshak {year} report is ready.\nDownload it here: {url}\n\n"
                     f"This private link stays active for {config.DOWNLOAD_DAYS} days.\n\nTeam Astro Diva Pratihast\n"
                     "support@divapratihast.com | +91 9311620907\n")
-    msg.add_alternative(render_body(full_name, year, url, cover.exists()), subtype="html")
-    if cover.exists():
-        msg.get_payload()[1].add_related(cover.read_bytes(), maintype="image", subtype="jpeg", cid="<cover>", filename="cover.jpg")
+    msg.add_alternative(render_body(full_name, year, url), subtype="html")
     try:
         if smtp["port"] == 465:
             with smtplib.SMTP_SSL(smtp["host"], smtp["port"], context=ssl.create_default_context(), timeout=300) as s:
@@ -95,4 +92,3 @@ def send_report(to_email: str, full_name: str, year: int, pdf_path: Path | str) 
                 s.send_message(msg)
     except (smtplib.SMTPException, OSError) as exc:
         raise MailError(f"could not send to {to_email}: {exc}") from exc
-    cover.unlink(missing_ok=True)

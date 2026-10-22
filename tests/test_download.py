@@ -38,17 +38,8 @@ def test_mail_has_button_link_and_no_attachment(env):
     mailer.send_report("a@b.co", "Nishant", 2027, pdf)
     m = sent[0]
     html = m.get_body(("html",)).get_content()
-    assert "Download Now" in html and "https://example.test/d/" in html and "NISHANT" in html
+    assert "Download your report" in html and "https://example.test/d/" in html and "Hello Nishant" in html
     assert not any(p.get_content_type() == "application/pdf" for p in m.walk())
-
-
-def test_cover_is_inline_and_removed_after_sending(env):
-    pdf, sent = env
-    pdf.with_suffix(".jpg").write_bytes(b"\xff\xd8\xff jpeg")
-    mailer.send_report("a@b.co", "Nishant", 2027, pdf)
-    assert "cid:cover" in sent[0].get_body(("html",)).get_content()
-    assert any(p.get_content_type() == "image/jpeg" and p["Content-ID"] == "<cover>" for p in sent[0].walk())
-    assert not pdf.with_suffix(".jpg").exists()
 
 
 def test_link_downloads_the_pdf_and_bad_or_expired_links_do_not(env):
